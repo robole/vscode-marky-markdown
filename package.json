@@ -1,52 +1,102 @@
 {
-	"name": "markdown-heading",
-	"displayName": "markdown-heading",
-	"description": "generate anchor links for headings in markdown files",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.46.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:markdown-heading.helloWorld"
-	],
-	"main": "./extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "markdown-heading.helloWorld",
-				"title": "Hello World"
-			}
-		],
-		"configuration": {
-            "type": "object",
-            "title": "Markdown-heading configuration",
-            "properties": {
-                "markdownHeading.base": {
-                    "type": "string",
-                    "default": "#",
-                    "description": "Customize the indicator of your heading line"
-                }
-            }
+  "name": "marky-markdown",
+  "displayName": "Marky Markdown",
+  "publisher": "robole",
+  "description": "A funky bunch of methods for writing markdown more easily.",
+  "icon": "img/icon/icon-500x500.png",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.46.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown"
+  ],
+  "bugs": {
+    "url": "https://github.com/robole/vscode-marky-markdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robole/vscode-marky-markdown"
+  },
+  "license": "MIT",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onCommand:marky-markdown.addHeadingLinks",
+    "onCommand:marky-markdown.removeHeadingLinks"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "marky-markdown.addHeadingLinks",
+        "title": "Marky Markdown: Add/Update heading bookmark links"
+      },
+      {
+        "command": "marky-markdown.removeHeadingLinks",
+        "title": "Marky Markdown: Remove heading bookmark links"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Marky Markdown configuration",
+      "properties": {
+        "markyMarkdown.headingLinkText": {
+          "type": "string",
+          "default": "∞",
+          "description": "Customize the text for the heading bookmark link.",
+          "category": "Heading"
+        },
+        "markyMarkdown.headingLinkImagePath": {
+          "type": "string",
+          "default": "",
+          "description": "Add an image for the heading bookmark link. You can specify a path relative to the markdown document, or an absolute path.",
+          "category": "Heading"
+        },
+        "markyMarkdown.headingStartingLevel": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "default": "2",
+          "description": "Select the starting heading level to which command actions are applied. For example, having a value of 2 applies actions to heading level 2 and beyond (3,4,5,6).",
+          "category": "Heading"
+        },
+        "markyMarkdown.headingSlugifyMode": {
+          "type": "string",
+          "enum": [
+            "github",
+            "gitlab"
+          ],
+          "default": "github",
+          "description": "Produces a version of heading text that can be used as an unique URL fragment. Select the style you want to follow.",
+          "category": "Heading"
         }
-
-	},
-	"scripts": {
-		"lint": "eslint .",
-		"pretest": "npm run lint",
-		"test": "node ./test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.46.0",
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^7.0.2",
-		"@types/node": "^13.11.0",
-		"eslint": "^6.8.0",
-		"glob": "^7.1.6",
-		"mocha": "^7.1.2",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.3.0"
-	}
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js",
+    "p": "vsce package"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "@types/vscode": "^1.46.0",
+    "eslint": "^6.8.0",
+    "glob": "^7.1.6",
+    "mocha": "^7.1.2",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
+  }
 }
