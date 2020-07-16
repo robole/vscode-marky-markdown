@@ -1,6 +1,6 @@
 # Marky Markdown
 
-A funky bunch of methods for writing markdown more easily. ✍😎🦚🤸‍♂️
+A funky bunch of methods for writing markdown more easily. ✍😎
 
 ![marky shaking his head](img/marky.gif)
 
@@ -13,17 +13,17 @@ The following commands can be run from the Command Palette (`Ctrl+Shift+P`).
 
 ## Features
 
-### 1. Manage bookmark links for headings 🔗
+### 1. Manage bookmark links for headings
 
 It is helpful to readers to have a link in headings for bookmarking different sections of a document. You probably have seen this done automatically by Github to `readme.md` files, like in the image below.
 
-<img src="https://i.ibb.co/2v1JM8m/heading-link.jpg" style="border:1px black solid;" alt="heading link" />
+<img src="img/screenshots/heading-link.jpg" style="border:1px black solid;" alt="heading link" />
 
 #### 1.1 Add/Update heading bookmark links
 
-![add bookmark link to headings ](img/screenshots/add-heading-link.gif)
+![add bookmark link to headings](img/screenshots/add-heading-link.gif)
 
-By default, it will add a link with the text '**∞**', this is the infinity character, which looks like a link! 🔗🧐 In the settings,you can customise this text, or add an image.
+By default, it will add a link with the text '**∞**', this is the infinity character, which looks like a link! In the settings, you can customise this text, or add an image.
 
 #### 1.2. Remove heading bookmark links
 
