@@ -46,7 +46,7 @@ describe("util", function () {
       assert.equal(util.slugify("ha 🐇-👎", "gitlab"), "ha-");
     });
 
-    it("should slugify 'gitlab' mode where a numeric-only slug is prefixed with the word 'anchor", () => {
+    it("should slugify 'gitlab' mode where a numeric-only slug is prefixed with 'anchor-'", () => {
       assert.equal(util.slugify("123", "gitlab"), "anchor-123");
       assert.equal(util.slugify("1.2 []", "gitlab"), "12-");
     });

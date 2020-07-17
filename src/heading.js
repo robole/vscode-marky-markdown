@@ -1,28 +1,19 @@
 const markdown = require("./markdown");
 const util = require("./util");
+const settings = require("./settings");
 const vscode = require("vscode");
-
-const _markdownCharacter = "#";
-let _linkText = "";
-let _linkImagePath = "";
-let _startingLevel = 2;
-let _slugifyMode = "";
+const MARKDOWN_CHAR = "#";
 
 module.exports = {
   addLinks: addLinks,
   addLinksToActiveEditor: addLinksToActiveEditor,
   removeLinks: removeLinks,
   removeLinksFromActiveEditor: removeLinksFromActiveEditor,
+  getAll: getAll,
+  getAllFromActiveEditor: getAllFromActiveEditor,
+  getLevel: getLevel,
+  stripMarkdown: stripMarkdown,
 };
-
-function _getConfigValues() {
-  // load the values from the configuration
-  let config = vscode.workspace.getConfiguration("markyMarkdown");
-  _linkText = config.get("headingLinkText");
-  _linkImagePath = config.get("headingLinkImagePath");
-  _slugifyMode = config.get("headingSlugifyMode");
-  _startingLevel = parseInt(config.get("headingStartingLevel"));
-}
 
 /*
     atx heading style: 
@@ -33,43 +24,53 @@ function _getConfigValues() {
 
   ^(\s*\#{1,6}\s*)(\[.*\]\(.*?\))(.*?)(*\#{0,6}\s*)$
 */
-function _getRegex(level) {
+function _getGroupedRegex(upperLevel) {
   return new RegExp(
-    "^(\\s*\\" +
-      _markdownCharacter +
+    "^(\\s*" +
+      MARKDOWN_CHAR +
       "{" +
-      level +
-      ",6}\\s*)(\\[.*\\]\\(.*?\\)\\s*)*(.*?)(\\" +
-      _markdownCharacter +
+      upperLevel +
+      ",6}\\s*)(\\[.*\\]\\(.*?\\)\\s*)*(.*?)(" +
+      MARKDOWN_CHAR +
       "{0,6}\\s*)$"
   );
 }
 
-function addLinksToActiveEditor() {
-  var editor = vscode.window.activeTextEditor;
+function _getRegex(upperLevel) {
+  return new RegExp("^" + MARKDOWN_CHAR + "{" + upperLevel + ",6}\\s.*", "gm");
+}
 
-  if (!editor) {
-    return; // No open text editor
+function addLinksToActiveEditor() {
+  let editor = vscode.window.activeTextEditor;
+
+  if (util.isMarkdownEditor(editor) === false) {
+    return; // No open markdown editor
   }
 
-  _getConfigValues();
-
-  let selection = util.getSelectionActiveEditor();
-  let lines = util.getTextActiveEditor();
-  let updatedLines = addLinks(lines, _linkImagePath, _linkText, _slugifyMode, _startingLevel);
+  let config = settings.getWorkspaceConfig();
+  let lines = util.getLinesOfActiveEditor();
+  let updatedLines = addLinks(
+    lines,
+    config.headingLinkImagePath,
+    config.headingLinkText,
+    config.headingSlugifyMode,
+    config.headingUpperLevel
+  );
 
   editor.edit(function (editBuilder) {
-    var resultText = updatedLines.join("\n");
-    editBuilder.replace(
-      new vscode.Range(selection.start, selection.end),
-      resultText
-    );
+    let endOfLine = util.getEndOfLineActiveEditor();
+    let resultText = updatedLines.join(endOfLine);
+    let lineCount = updatedLines.length;
+    let lastCharPos = updatedLines[lineCount - 1].length;
+    let entireDoc = new vscode.Range(0, 0, lineCount, lastCharPos);
+
+    editBuilder.replace(entireDoc, resultText);
   });
 }
 
 //expects string array
-function addLinks(lines, imagePath, linkText, slugifyMode, startingLevel) {
-  let regex = _getRegex(startingLevel);
+function addLinks(lines, imagePath, linkText, slugifyMode, upperLevel) {
+  let regex = _getGroupedRegex(upperLevel);
 
   lines.forEach(function (line, i) {
     let result = regex.exec(line);
@@ -107,28 +108,29 @@ function _createLink(id, text, imagePath) {
 function removeLinksFromActiveEditor() {
   var editor = vscode.window.activeTextEditor;
 
-  if (!editor) {
-    return; // No open text editor
+  if (util.isMarkdownEditor(editor) === false) {
+    return; // No open markdown editor
   }
 
-  _getConfigValues();
-
-  let selection = util.getSelectionActiveEditor();
-  let lines = util.getTextActiveEditor();
-  let updatedLines = removeLinks(lines, _startingLevel);
+  let config = settings.getWorkspaceConfig();
+  let lines = util.getLinesOfActiveEditor();
+  let updatedLines = removeLinks(lines, config.headingUpperLevel);
 
   editor.edit(function (editBuilder) {
-    var resultText = updatedLines.join("\n");
-    editBuilder.replace(
-      new vscode.Range(selection.start, selection.end),
-      resultText
-    );
+    let endOfLine = util.getEndOfLineActiveEditor();
+    let resultText = updatedLines.join(endOfLine);
+
+    let lineCount = updatedLines.length;
+    let lastCharPos = updatedLines[lineCount - 1].length;
+    let entireDoc = new vscode.Range(0, 0, lineCount, lastCharPos);
+
+    editBuilder.replace(entireDoc, resultText);
   });
 }
 
 //expects string array
-function removeLinks(lines, startingLevel) {
-  let regex = _getRegex(startingLevel);
+function removeLinks(lines, upperLevel) {
+  let regex = _getGroupedRegex(upperLevel);
 
   lines.forEach(function (line, i) {
     let result = regex.exec(line);
@@ -142,4 +144,45 @@ function removeLinks(lines, startingLevel) {
     }
   });
   return lines;
+}
+
+function getAllFromActiveEditor() {
+  if (util.isMarkdownEditor(editor) === false) {
+    return; // No open markdown editor
+  }
+
+  let config = settings.getWorkspaceConfig();
+  const text = util.getTextActiveEditor();
+  let headings = getAll(text, config.headingUpperLevel);
+  return headings;
+}
+
+function getAll(text, upperLevel) {
+  const regex = _getRegex(upperLevel);
+  const matches = text.match(regex);
+  return matches;
+}
+
+function getLevel(text) {
+  let regex = new RegExp("^" + MARKDOWN_CHAR + "{1,6}");
+  let result = regex.exec(text.trim());
+  let level = 0;
+
+  if (result !== null && result[0].length > 0) {
+    level = result[0].length;
+  }
+
+  return level;
+}
+
+function stripMarkdown(heading) {
+  let regex = new RegExp("^(\\" + MARKDOWN_CHAR + "{1,6})(\\s)(.*)");
+  let result = regex.exec(heading.trim());
+  let text = "";
+
+  if (result !== null && result.length === 4) {
+    text = result[3];
+  }
+
+  return text;
 }
