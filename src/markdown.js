@@ -1,6 +1,6 @@
 module.exports = {
-  image: image,
-  link: link,
+  image,
+  link,
 };
 
 function image(alt, imagePath) {

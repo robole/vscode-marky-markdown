@@ -2,17 +2,26 @@
   "name": "marky-markdown",
   "displayName": "Marky Markdown",
   "publisher": "robole",
+  "author": {
+    "name": "Rob O'Leary"
+  },
   "description": "A funky bunch of methods for writing markdown more easily.",
   "icon": "img/icon/icon-500x500.png",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.46.0"
   },
   "categories": [
     "Other"
   ],
+  "galleryBanner": {
+    "color": "#fcc2f8"
+  },
   "keywords": [
-    "markdown"
+    "markdown",
+    "table of contents",
+    "toc",
+    "bookmark"
   ],
   "bugs": {
     "url": "https://github.com/robole/vscode-marky-markdown/issues"
@@ -25,59 +34,69 @@
   "activationEvents": [
     "onLanguage:markdown",
     "onCommand:marky-markdown.addHeadingLinks",
-    "onCommand:marky-markdown.removeHeadingLinks"
+    "onCommand:marky-markdown.removeHeadingLinks",
+    "onCommand:marky-markdown.addTableOfContents",
+    "onCommand:marky-markdown.removeTableOfContents"
   ],
   "main": "./src/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "marky-markdown.addHeadingLinks",
-        "title": "Marky Markdown: Add/Update heading bookmark links"
+        "title": "Marky Markdown: Add/Update Heading Bookmark Links"
       },
       {
         "command": "marky-markdown.removeHeadingLinks",
-        "title": "Marky Markdown: Remove heading bookmark links"
+        "title": "Marky Markdown: Remove Heading Bookmark Links"
+      },
+      {
+        "command": "marky-markdown.addTableOfContents",
+        "title": "Marky Markdown: Add/Update the Table of Contents (TOC)"
+      },
+      {
+        "command": "marky-markdown.removeTableOfContents",
+        "title": "Marky Markdown: Remove the Table of Contents (TOC)"
       }
     ],
     "configuration": {
       "type": "object",
       "title": "Marky Markdown configuration",
       "properties": {
-        "markyMarkdown.headingLinkText": {
+        "markyMarkdown.heading.levelRange": {
+          "type": "string",
+          "default": "2..6",
+          "description": "Select the range of heading levels (from most important to least important) to which Commands are applied. For example, having a range of '2..6' includes headings from level 2 to level 6.",
+          "pattern": "([1-6]{1})\\.\\.([1-6]{1})",
+          "patternErrorMessage": "Must define a range of numbers in the format of '2..6'. The numbers must be between 1 and 6. The first number should be greater than or equal to the second number."
+        },
+        "markyMarkdown.heading.linkText": {
           "type": "string",
           "default": "∞",
-          "description": "Customize the text for the heading bookmark link.",
-          "category": "Heading"
+          "description": "Customize the text for heading bookmark links."
         },
-        "markyMarkdown.headingLinkImagePath": {
+        "markyMarkdown.heading.linkImagePath": {
           "type": "string",
           "default": "",
-          "description": "Add an image for the heading bookmark link. You can specify a path relative to the markdown document, or an absolute path.",
-          "category": "Heading"
+          "description": "Add an image to the heading bookmark link. If both text and an image are specified, the image will come first."
         },
-        "markyMarkdown.headingStartingLevel": {
-          "type": "string",
-          "enum": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"
-          ],
-          "default": "2",
-          "description": "Select the starting heading level to which command actions are applied. For example, having a value of 2 applies actions to heading level 2 and beyond (3,4,5,6).",
-          "category": "Heading"
-        },
-        "markyMarkdown.headingSlugifyMode": {
+        "markyMarkdown.heading.slugifyMode": {
           "type": "string",
           "enum": [
             "github",
             "gitlab"
           ],
           "default": "github",
-          "description": "Produces a version of heading text that can be used as an unique URL fragment. Select the style you want to follow.",
-          "category": "Heading"
+          "description": "Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors have different implementations, and produce different slugs. The text from links are included in slugification."
+        },
+        "markyMarkdown.tableOfContents.label": {
+          "type": "string",
+          "default": "",
+          "description": "Add a label to the top of the Table of Contents."
+        },
+        "markyMarkdown.tableOfContents.updateOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Update the Table of Contents automatically when the document is saved."
         }
       }
     }
@@ -86,20 +105,24 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test": "node ./test/runTest.js",
-    "pack": "vsce package"
+    "p": "vsce package"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.11.0",
     "@types/vscode": "^1.46.0",
-    "eslint": "^6.8.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
+    "prettier": "^2.0.5",
     "typescript": "^3.8.3",
+    "vsce": "^1.77.0",
     "vscode-test": "^1.3.0"
-  },
-  "dependencies": {
-    "vsce": "^1.77.0"
   }
 }

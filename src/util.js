@@ -1,45 +1,70 @@
 let vscode = require("vscode");
-let editor = vscode.window.activeTextEditor;
 
 // Converted from `/[^\p{Word}\- ]/u`
 // `\p{Word}` => ASCII plus Letter (Ll/Lm/Lo/Lt/Lu), Mark (Mc/Me/Mn), Number (Nd/Nl/No), Connector_Punctuation (Pc)
 const PUNCTUATION_REGEXP = /[^\p{L}\p{M}\p{N}\p{Pc}\- ]/gu;
 
 module.exports = {
-  getSelectionActiveEditor: getSelectionActiveEditor,
-  getTextActiveEditor: getTextActiveEditor,
-  slugify: slugify,
+  getSelectionActiveEditor,
+  getLinesOfActiveEditor,
+  getTextActiveEditor,
+  slugify,
+  isMarkdownEditor,
+  getEndOfLineActiveEditor,
 };
+
+function getEndOfLineActiveEditor() {
+  let eolTypeEnum = vscode.window.activeTextEditor.document.eol;
+  let eol = "";
+
+  if (eolTypeEnum === 1) {
+    eol = "\n";
+  } else if (eolTypeEnum === 2) {
+    eol = "\r\n";
+  }
+
+  return eol;
+}
+
+function isMarkdownEditor(editor) {
+  return editor && editor.document && editor.document.languageId === "markdown";
+}
 
 //Returns selection, if seletion is empty, returns the entire document as a selection.
 function getSelectionActiveEditor() {
-  editor = vscode.window.activeTextEditor;
+  let editor = vscode.window.activeTextEditor;
   let selection = editor.selection;
 
   if (selection.isEmpty) {
-    let lines = editor.document.getText().split("\n");
-    return new vscode.Selection(0, 0, lines.length, 0);
+    return new vscode.Selection(0, 0, editor.document.lineCount, 0);
   }
 
   return selection;
 }
 
-//Returns the selected text, if there is no selection returns text of entire document.
-function getTextActiveEditor() {
-  editor = vscode.window.activeTextEditor;
-
-  let selection = editor.selection;
-  let text = editor.document.getText(selection);
+//Returns the the text of entire document as an array with an entry for each line.
+function getLinesOfActiveEditor() {
   let lines = null;
+  let text = getTextActiveEditor();
+  let endOfLineRegex = /\r?\n/g;
 
-  if (text.length == 0) {
-    lines = editor.document.getText().split("\n");
-    selection = new vscode.Selection(0, 0, lines.length, 0);
-  } else {
-    lines = text.split("\n");
+  if (text !== null && text.length !== 0) {
+    lines = text.split(endOfLineRegex);
   }
 
   return lines;
+}
+
+//Returns the text of entire document.
+function getTextActiveEditor() {
+  let editor = vscode.window.activeTextEditor;
+  let text = null;
+
+  if (editor && editor.document) {
+    text = editor.document.getText();
+  }
+
+  return text;
 }
 
 //Produces an ID from text that can be used as an URL fragment. Replaces
@@ -63,8 +88,7 @@ function slugify(text, mode) {
 }
 
 /*
-Based on original code: https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb 
-with some input from https://github.com/yzhang-gh/vscode-markdown/blob/master/src/util.ts
+Based on source code: https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb
 */
 function _slugifyGithubStyle(text) {
   let slug = text.trim().toLowerCase();
@@ -73,8 +97,7 @@ function _slugifyGithubStyle(text) {
 }
 
 /*
-Based on original code: https://gitlab.com/gitlab-org/gitlab/-/blob/6a71a82a1a0fb3dcdc2e471027bd156b15e2be3e/lib/gitlab/utils/markdown.rb
-with some input from https://github.com/yzhang-gh/vscode-markdown/blob/master/src/util.ts
+Based on source code: https://gitlab.com/gitlab-org/gitlab/-/blob/6a71a82a1a0fb3dcdc2e471027bd156b15e2be3e/lib/gitlab/utils/markdown.rb
 */
 function _slugifyGitlabStyle(text) {
   let slug = text.trim().toLowerCase();
