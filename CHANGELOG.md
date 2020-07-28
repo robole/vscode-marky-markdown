@@ -1,9 +1,23 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.1.0] - 2020-07-28
+
+These efforts reduced size of packaged _.vsix_ from 1.33MB to 775KB.
+
+### Added
+
+- Webpack configuration to bundle into extension into dist/extension.js
+
+### Changed
+
+- Updated _.vscodeignore_ to exclude the _src_ folder, and some images.
+- Optimized _marky.gif_.
+- Added new scripts to _package.json_ to manage bundling and publishing.
 
 ## [1.0.0] - 2020-07-23
 
