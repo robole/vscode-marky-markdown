@@ -7,7 +7,7 @@
   },
   "description": "A funky bunch of methods for writing markdown more easily.",
   "icon": "img/icon/icon-500x500.png",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -43,12 +43,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "marky-markdown.addHeadingLinks",
-        "title": "Marky Markdown: Add/Update Heading Bookmark Links"
+        "command": "marky-markdown.addBookmarks",
+        "title": "Marky Markdown: Add/Update Heading Bookmarks"
       },
       {
-        "command": "marky-markdown.removeHeadingLinks",
-        "title": "Marky Markdown: Remove Heading Bookmark Links"
+        "command": "marky-markdown.removeBookmarks",
+        "title": "Marky Markdown: Remove Heading Bookmarks"
       },
       {
         "command": "marky-markdown.addTableOfContents",
@@ -63,24 +63,36 @@
       "type": "object",
       "title": "Marky Markdown configuration",
       "properties": {
-        "markyMarkdown.heading.levelRange": {
+        "markyMarkdown.bookmarks.levelRange": {
           "type": "string",
           "default": "2..6",
-          "description": "Select the range of heading levels (from most important to least important) to which Commands are applied. For example, having a range of '2..6' includes headings from level 2 to level 6.",
+          "description": "Select the range of heading levels (from most important to least important) to which bookmarks are managed. For example, having a range of '2..6' includes headings from level 2 to level 6.",
           "pattern": "([1-6]{1})\\.\\.([1-6]{1})",
           "patternErrorMessage": "Must define a range of numbers in the format of '2..6'. The numbers must be between 1 and 6. The first number should be greater than or equal to the second number."
         },
-        "markyMarkdown.heading.linkText": {
+        "markyMarkdown.bookmarks.linkText": {
           "type": "string",
           "default": "∞",
-          "description": "Customize the text for heading bookmark links."
+          "description": "Customize the text for heading bookmark."
         },
-        "markyMarkdown.heading.linkImagePath": {
+        "markyMarkdown.bookmarks.linkImagePath": {
           "type": "string",
           "default": "",
-          "description": "Add an image to the heading bookmark link. If both text and an image are specified, the image will come first."
+          "description": "Add an image to the heading bookmark. If both text and an image are specified, the image will come first."
         },
-        "markyMarkdown.heading.slugifyMode": {
+        "markyMarkdown.tableOfContents.levelRange": {
+          "type": "string",
+          "default": "2..6",
+          "description": "Select the range of heading levels (from most important to least important) to which the Table of Contents will include. For example, having a range of '2..6' includes headings from level 2 to level 6.",
+          "pattern": "([1-6]{1})\\.\\.([1-6]{1})",
+          "patternErrorMessage": "Must define a range of numbers in the format of '2..6'. The numbers must be between 1 and 6. The first number should be greater than or equal to the second number."
+        },
+        "markyMarkdown.tableOfContents.label": {
+          "type": "string",
+          "default": "",
+          "description": "Add a label to the top of the Table of Contents."
+        },
+        "markyMarkdown.slugifyMode": {
           "type": "string",
           "enum": [
             "github",
@@ -89,15 +101,10 @@
           "default": "github",
           "description": "Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors have different implementations, and produce different slugs. The text from links are included in slugification."
         },
-        "markyMarkdown.tableOfContents.label": {
-          "type": "string",
-          "default": "",
-          "description": "Add a label to the top of the Table of Contents."
-        },
-        "markyMarkdown.tableOfContents.updateOnSave": {
+        "markyMarkdown.updateOnSave": {
           "type": "boolean",
           "default": false,
-          "description": "Update the Table of Contents automatically when the document is saved."
+          "description": "Update the Bookmarks and Table of Contents automatically when the document is saved."
         }
       }
     }

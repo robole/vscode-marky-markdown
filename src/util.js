@@ -1,4 +1,5 @@
 let vscode = require("vscode");
+let settings= require("./settings");
 
 // Converted from `/[^\p{Word}\- ]/u`
 // `\p{Word}` => ASCII plus Letter (Ll/Lm/Lo/Lt/Lu), Mark (Mc/Me/Mn), Number (Nd/Nl/No), Connector_Punctuation (Pc)
@@ -9,12 +10,11 @@ module.exports = {
   getLinesOfActiveEditor,
   getTextActiveEditor,
   slugify,
-  isMarkdownEditor,
-  getEndOfLineActiveEditor,
+  getEndOfLine,
 };
 
-function getEndOfLineActiveEditor() {
-  let eolTypeEnum = vscode.window.activeTextEditor.document.eol;
+function getEndOfLine(editor) {
+  let eolTypeEnum = editor.document.eol;
   let eol = "";
 
   if (eolTypeEnum === 1) {
@@ -24,10 +24,6 @@ function getEndOfLineActiveEditor() {
   }
 
   return eol;
-}
-
-function isMarkdownEditor(editor) {
-  return editor && editor.document && editor.document.languageId === "markdown";
 }
 
 //Returns selection, if seletion is empty, returns the entire document as a selection.
@@ -74,9 +70,7 @@ function slugify(text, mode) {
   mode = mode.toLowerCase();
 
   if (mode === undefined) {
-    mode = vscode.workspace
-      .getConfiguration("markyMarkdown")
-      .get("headingSlugifyMode");
+    mode = settings.getWorkspaceConfig().slugifyMode;
   }
 
   if (mode === "gitlab") {

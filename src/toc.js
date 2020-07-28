@@ -3,6 +3,7 @@ const heading = require("./heading");
 const util = require("./util");
 const settings = require("./settings");
 const markdown = require("./markdown");
+const document = require("./document");
 
 const MARKDOWN_LIST_ITEM = "-";
 const REGEX_TOC_START = /(.*?)<!--\s*TOC\s*-->/gi;
@@ -14,10 +15,8 @@ const defaultEOL = "\r\n";
 
 module.exports = {
   create,
-  addToActiveEditor,
-  updateForActiveEditor,
-  removeFromActiveEditor,
-  onWillSave,
+  getRange,
+  getText,
   getCodeLens,
 };
 
@@ -26,15 +25,14 @@ module.exports = {
  * If there is no TOC, return the current cursor position.
  * If the editor is not available, return undefined.
  */
-function _getRange() {
-  let editor = vscode.window.activeTextEditor;
-  let doc = editor.document;
-  let start = undefined,
-    end = undefined;
-
+function getRange(editor) {
   if (editor === undefined) {
     return undefined;
   }
+
+  let doc = editor.document;
+  let start = undefined,
+    end = undefined;
 
   for (let lineNo = 0; lineNo < doc.lineCount; lineNo++) {
     let lineText = doc.lineAt(lineNo).text;
@@ -72,7 +70,7 @@ function _getRange() {
 }
 
 function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
-  let headings = heading.getAllGrouped(text, fromLevel, toLevel);
+  let headings = document.getGroupedHeadings(text, fromLevel, toLevel);
   let toc = [];
   toc.push(TOC_START);
 
@@ -109,122 +107,22 @@ function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
   return tocString;
 }
 
-async function addToActiveEditor() {
-  let editor = vscode.window.activeTextEditor;
-
-  if (util.isMarkdownEditor(editor) === false) {
-    return; // No open markdown editor
-  }
-
-  let range = _getRange();
-
-  if (range === undefined) {
-    vscode.window.showErrorMessage("TOC block is not closed.");
-    return;
-  }
-
-  var text = editor.document.getText();
-  let config = settings.getWorkspaceConfig();
-  let endOfLine = util.getEndOfLineActiveEditor();
-  let toc = create(
-    text,
-    config.headingFromLevel,
-    config.headingToLevel,
-    config.headingSlugifyMode,
-    config.tableOfContentsLabel,
-    endOfLine
-  );
-
-  if (range.isEmpty) {
-    //if the range is empty (start === end),the toc does not exist
-    await editor.edit(function (editBuilder) {
-      editBuilder.insert(range.start, toc + endOfLine);
-    });
-  } else {
-    //exists already
-    await editor.edit(function (editBuilder) {
-      editBuilder.replace(range, toc);
-    });
-  }
-}
-
-async function updateForActiveEditor() {
-  let editor = vscode.window.activeTextEditor;
-
-  if (util.isMarkdownEditor(editor) === false) {
-    return; // No open markdown editor
-  }
-
-  let range = _getRange();
-
-  //if the range is empty (start === end),the toc does not exist
-  if (range === undefined || range.isEmpty) {
-    return;
-  }
-
-  var text = editor.document.getText();
-  let config = settings.getWorkspaceConfig();
-  let endOfLine = util.getEndOfLineActiveEditor();
-  let toc = create(
-    text,
-    config.headingFromLevel,
-    config.headingToLevel,
-    config.headingSlugifyMode,
-    config.tableOfContentsLabel,
-    endOfLine
-  );
-
-  await editor.edit(function (editBuilder) {
-    editBuilder.replace(range, toc);
-  });
-}
-
-function removeFromActiveEditor() {
-  let editor = vscode.window.activeTextEditor;
-
-  if (util.isMarkdownEditor(editor) === false) {
-    return; // No open markdown editor
-  }
-
-  let range = _getRange();
-
-  if (range === undefined) {
-    vscode.window.showErrorMessage("TOC block is not closed.");
-    return;
-  } else if (range.isEmpty) {
-    return;
-  }
-
-  editor.edit(function (editBuilder) {
-    editBuilder.delete(range);
-  });
-}
-
-function onWillSave(textDocumentWillSaveEvent) {
-  let config = settings.getWorkspaceConfig();
-  if (config.tableOfContentsUpdateOnSave === false) return;
-  if (textDocumentWillSaveEvent.document.languageId == "markdown") {
-    textDocumentWillSaveEvent.waitUntil(updateForActiveEditor());
-  }
-}
-
-function isUpToDate() {
-  let range = _getRange();
+function isUpToDate(editor) {
+  let range = getRange(editor);
   if (range.isEmpty) {
     return;
   }
 
-  let editor = vscode.window.activeTextEditor;
   var currentToc = editor.document.getText(range);
 
   var text = editor.document.getText();
   let config = settings.getWorkspaceConfig();
-  let endOfLine = util.getEndOfLineActiveEditor();
+  let endOfLine = util.getEndOfLine(editor);
   let toc = create(
     text,
-    config.headingFromLevel,
-    config.headingToLevel,
-    config.headingSlugifyMode,
+    config.tableOfContentsFromLevel,
+    config.tableOfContentsToLevel,
+    config.slugifyMode,
     config.tableOfContentsLabel,
     endOfLine
   );
@@ -232,13 +130,21 @@ function isUpToDate() {
   return currentToc === toc;
 }
 
-function getCodeLens() {
-  let range = _getRange();
-  if (range.isEmpty) {
+function getText(editor){
+  let range = getRange(editor);
+  if (range === undefined || range.isEmpty) {
+    return "";
+  }
+  return editor.document.getText(range);
+}
+
+function getCodeLens(editor) {
+  let range = getRange(editor);
+  if (range === undefined || range.isEmpty) {
     return;
   }
 
-  let upToDate = isUpToDate();
+  let upToDate = isUpToDate(editor);
   let status = "";
   upToDate ? (status = "up to date :-)") : (status = "out of date :-(");
 

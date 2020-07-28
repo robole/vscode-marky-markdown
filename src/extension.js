@@ -1,34 +1,29 @@
 const vscode = require("vscode");
-const heading = require("./heading");
-const toc = require("./toc");
-
-/**
- * @param {vscode.ExtensionContext} context
- */
+const editor = require("./activeeditor");
 
 function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "marky-markdown.addHeadingLinks",
-      heading.addLinksToActiveEditor
+      "marky-markdown.addBookmarks",
+      editor.addBookmarks
     ),
     vscode.commands.registerCommand(
-      "marky-markdown.removeHeadingLinks",
-      heading.removeLinksFromActiveEditor
+      "marky-markdown.removeBookmarks",
+      editor.removeBookmarks
     ),
     vscode.commands.registerCommand(
       "marky-markdown.addTableOfContents",
-      toc.addToActiveEditor
+      editor.addTableOfContents
     ),
     vscode.commands.registerCommand(
       "marky-markdown.removeTableOfContents",
-      toc.removeFromActiveEditor
+      editor.removeTableOfContents
     ),
-    vscode.workspace.onWillSaveTextDocument(toc.onWillSave),
+    vscode.workspace.onWillSaveTextDocument(editor.onWillSave),
     vscode.languages.registerCodeLensProvider("markdown", {
       provideCodeLenses(document, token) {
-        return toc.getCodeLens();
-      }
+        return editor.getTableOfContentsCodeLens();
+      },
     })
   );
 }
@@ -38,5 +33,5 @@ function deactivate() {}
 
 module.exports = {
   activate,
-  deactivate
+  deactivate,
 };
