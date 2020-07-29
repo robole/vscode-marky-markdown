@@ -16,6 +16,10 @@ module.exports = {
   onWillSave
 };
 
+/**
+* Add bookmark links to the headings based on the range specified in the Configuration.
+*
+*/
 function addBookmarks() {
   const editor = vscode.window.activeTextEditor;
 
@@ -24,12 +28,12 @@ function addBookmarks() {
   }
 
   const config = settings.getWorkspaceConfig();
-  const lines = util.getLinesOfActiveEditor();
+  const lines = getLines();
   const updatedLines = doc.addBookmarks(
     lines,
     config.bookmarksLinkImagePath,
     config.bookmarksLinkText,
-    config.slugifyMode,
+    config.slugifyStyle,
     config.bookmarksFromLevel,
     config.bookmarksToLevel
   );
@@ -45,6 +49,10 @@ function addBookmarks() {
   });
 }
 
+/**
+* Remove bookmark links from the headings based on the range specified in the Configuration.
+*
+*/
 function removeBookmarks() {
   const editor = vscode.window.activeTextEditor;
 
@@ -53,7 +61,7 @@ function removeBookmarks() {
   }
 
   const config = settings.getWorkspaceConfig();
-  const lines = util.getLinesOfActiveEditor();
+  const lines = getLines();
   const updatedLines = doc.removeBookmarks(
     lines,
     config.bookmarksFromLevel,
@@ -72,6 +80,10 @@ function removeBookmarks() {
   });
 }
 
+/**
+* Scans the contents of the document in the Active Editor to check if it has bookmarks.
+* @returns {boolean}
+*/
 function hasBookmarks() {
   const editor = vscode.window.activeTextEditor;
   const text = editor.document.getText();
@@ -80,6 +92,12 @@ function hasBookmarks() {
   return doc.hasBookmarks(text, config.bookmarksFromLevel, config.bookmarksToLevel);
 }
 
+/**
+* Get an array of the headings from the document in the Active Editor based on the range provided.
+* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+* @param {number} toLevel - The end of the heading level range which you want to include (least important).
+* @returns {Array} Array of headings found.
+*/
 function getHeadings(fromLevel, toLevel) {
   const editor = vscode.window.activeTextEditor;
 
@@ -87,8 +105,7 @@ function getHeadings(fromLevel, toLevel) {
     return;
   }
 
-  const config = settings.getWorkspaceConfig();
-  const text = util.getTextActiveEditor();
+  const text = editor.document.getText();
   const headings = doc.getHeadings(
     text,
     fromLevel,
@@ -98,6 +115,10 @@ function getHeadings(fromLevel, toLevel) {
   return headings;
 }
 
+/**
+* @async
+* Add a Table of Contents to the document in the Active Editor.
+*/
 async function addTableOfContents() {
   const editor = vscode.window.activeTextEditor;
 
@@ -120,7 +141,7 @@ async function addTableOfContents() {
     text,
     config.tableOfContentsFromLevel,
     config.tableOfContentsToLevel,
-    config.slugifyMode,
+    config.slugifyStyle,
     config.tableOfContentsLabel,
     endOfLine
   );
@@ -138,6 +159,10 @@ async function addTableOfContents() {
   }
 }
 
+/**
+* @async
+* Updates the Table of Contents in the document in the Active Editor if one exists.
+*/
 async function updateTableOfContents() {
   const editor = vscode.window.activeTextEditor;
 
@@ -160,7 +185,7 @@ async function updateTableOfContents() {
     text,
     config.tableOfContentsFromLevel,
     config.tableOfContentsToLevel,
-    config.slugifyMode,
+    config.slugifyStyle,
     config.tableOfContentsLabel,
     endOfLine
   );
@@ -170,6 +195,10 @@ async function updateTableOfContents() {
   });
 }
 
+/**
+* @async
+* Removes the Table of Contents in the document in the Active Editor if one exists.
+*/
 function removeTableOfContents() {
   const editor = vscode.window.activeTextEditor;
 
@@ -214,17 +243,28 @@ function getEndOfLine() {
   return eol;
 }
 
+/**
+* @async
+* Executed just before the document is saved. It will update the dynamic
+* contents (bookmarks, table of contents) of the document in the Active Editor
+* if the "Update on Save" setting is selected in the Configuration.
+*/
 async function onWillSave(textDocumentWillSaveEvent) {
   const editor = vscode.window.activeTextEditor;
   let config = settings.getWorkspaceConfig();
 
   if (config.updateOnSave === false) return;
 
-  if (editor.document === textDocumentWillSaveEvent.document) {
+  if (textDocumentWillSaveEvent.document && textDocumentWillSaveEvent.document.languageId === "markdown") {
     await textDocumentWillSaveEvent.waitUntil(_updateOnSave());
   }
 }
 
+/**
+* @async
+* Updates the dynamic contents (bookmarks, table of contents) of the document in the Active Editor
+*  if the "Update on Save" setting is selected in the Configuration.
+*/
 async function _updateOnSave() {
   const editor = vscode.window.activeTextEditor;
   let config = settings.getWorkspaceConfig();
@@ -238,7 +278,7 @@ async function _updateOnSave() {
       text,
       config.tableOfContentsFromLevel,
       config.tableOfContentsToLevel,
-      config.slugifyMode,
+      config.slugifyStyle,
       config.tableOfContentsLabel,
       endOfLine
     );
@@ -252,7 +292,7 @@ async function _updateOnSave() {
       lines,
       config.bookmarksLinkImagePath,
       config.bookmarksLinkText,
-      config.slugifyMode,
+      config.slugifyStyle,
       config.bookmarksFromLevel,
       config.bookmarksToLevel
     );
@@ -261,11 +301,16 @@ async function _updateOnSave() {
   }
 
   if(updated){
-   await _update(text);
+   await _replace(text);
   }
 }
 
-async function _update(text){
+/**
+* @async
+* Replaces the contents of the entire document in the Active Editor with the text provided.
+* @param {string} text - Replacement text
+*/
+async function _replace(text){
   const editor = vscode.window.activeTextEditor;
   const lineCount = editor.document.lineCount;
   const lastCharPos = editor.document.lineAt(lineCount - 1).text.length;
@@ -274,4 +319,21 @@ async function _update(text){
   await editor.edit(function (editBuilder) {
     editBuilder.replace(entireDoc, text);
   });
+}
+
+/**
+ * Returns the the text of entire document in the Active Editor as an array with an entry for each line.
+ *
+ */
+function getLines() {
+  const editor = vscode.window.activeTextEditor;
+  let text = editor.document.getText();
+  let lines = null;
+  const END_OF_LINE_REGEX = /\r?\n/g;
+
+  if (text !== null && text.length !== 0) {
+    lines = text.split(END_OF_LINE_REGEX);
+  }
+
+  return lines;
 }

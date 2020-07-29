@@ -5,6 +5,10 @@ module.exports = {
   getLevels,
 };
 
+/**
+* Get a config object with the properties related to this extension
+* @returns {object} Custom config object
+*/
 function getWorkspaceConfig() {
   let config = {};
 
@@ -30,13 +34,18 @@ function getWorkspaceConfig() {
   config.updateOnSave = vscode.workspace.getConfiguration(
     "markyMarkdown"
   ).get("updateOnSave");
-  config.slugifyMode = vscode.workspace.getConfiguration(
+  config.slugifyStyle = vscode.workspace.getConfiguration(
     "markyMarkdown"
-  ).get("slugifyMode");
+  ).get("slugifyStyle");
 
   return config;
 }
 
+/**
+* Helper function to get the levels from a range which is a setting option in the configuration
+* @param {number} levelRange - Range in the form "1..6"
+* @returns {Array} Array with the fromLevel as the first entry, and toLevel as the second entry
+*/
 function getLevels(levelRange) {
   let regex = /([1-6]{1})\.\.([1-6]{1})/;
   let result = regex.exec(levelRange);

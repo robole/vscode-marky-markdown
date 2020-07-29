@@ -15,8 +15,8 @@ module.exports = {
 
 /**
  * Global, multiline regex to find ATX heading styles based on a range of heading levels. The content is grouped:
- *    group 0 = entire match, group 1 = opening markdown characters, group 2 = link including image.
- *    group 3 = text, group 4 = optional closing markdown characters.
+ * group 0 = entire match, group 1 = opening markdown characters, group 2 = link including image,
+ * group 3 = text, group 4 = optional closing markdown characters.
  *
  * The raw regex would look something like this:
  * /^(\s*#{1,6}\s*)(\[.*\]\(.*?\))(.*?)(\\s?#{0,6}\s*)$/gm

@@ -7,9 +7,9 @@ const document = require("./document");
 
 const MARKDOWN_LIST_ITEM = "-";
 const REGEX_TOC_START = /(.*?)<!--\s*TOC\s*-->/gi;
-const TOC_START = "<!-- TOC -->";
+const TOC_START = `<!-- TOC -->`;
 const REGEX_TOC_END = /\s*<!--\s*\/TOC\s*-->/gi;
-const TOC_END = "<!-- /TOC -->";
+const TOC_END = `<!-- /TOC -->`;
 const TAB = "\t";
 const defaultEOL = "\r\n";
 
@@ -21,9 +21,10 @@ module.exports = {
 };
 
 /**
- * Get the range of the TOC.
- * If there is no TOC, return the current cursor position.
- * If the editor is not available, return undefined.
+ * Get the range of the Table of Contents (TOC). If the editor is not available, it will return undefined.
+ * If there is no TOC, it will return an empty range (start === end) for the current cursor position.
+ * @param {import("vscode").TextEditor} editor - TextEditor you want to check
+ * @returns {vscode.Range} Range of the TOC
  */
 function getRange(editor) {
   if (editor === undefined) {
@@ -69,7 +70,17 @@ function getRange(editor) {
   return new vscode.Range(start, end);
 }
 
-function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
+/**
+* Create a Table of Contents based on the inputs.
+*  @param {string} text - The text to create the TOC from.
+*  @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+*  @param {number} toLevel - The end of the heading level range which you want to include (least important).
+* @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
+*  @param {String} label - A lable to add to the top of the TOC. This is optional.
+*  @param {String} endOfLine - The end of line characters to use
+*  @returns {string} Table of Contents
+ */
+function create(text, fromLevel, toLevel, slugifyStyle, label, endOfLine) {
   let headings = document.getGroupedHeadings(text, fromLevel, toLevel);
   let toc = [];
   toc.push(TOC_START);
@@ -82,7 +93,7 @@ function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
     let level = heading.getLevel(currHeading[0]);
     let headingText = currHeading[3];
 
-    let id = util.slugify(headingText, slugifyMode);
+    let id = util.slugify(headingText, slugifyStyle);
     let link = markdown.link(headingText, "#" + id);
     let item = "";
 
@@ -98,8 +109,8 @@ function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
 
   let tocString = "";
 
-  if (EOL && EOL.length > 0) {
-    tocString = toc.join(EOL);
+  if (endOfLine && endOfLine.length > 0) {
+    tocString = toc.join(endOfLine);
   } else {
     tocString = toc.join(defaultEOL);
   }
@@ -107,6 +118,11 @@ function create(text, fromLevel, toLevel, slugifyMode, label, EOL) {
   return tocString;
 }
 
+/**
+ * Check if the Table of Contents is up to date with the contents.
+ * @param {import("vscode").TextEditor} editor
+ * @returns {boolean} Up to date status
+ */
 function isUpToDate(editor) {
   let range = getRange(editor);
   if (range.isEmpty) {
@@ -122,7 +138,7 @@ function isUpToDate(editor) {
     text,
     config.tableOfContentsFromLevel,
     config.tableOfContentsToLevel,
-    config.slugifyMode,
+    config.slugifyStyle,
     config.tableOfContentsLabel,
     endOfLine
   );
@@ -130,7 +146,13 @@ function isUpToDate(editor) {
   return currentToc === toc;
 }
 
-function getText(editor){
+/**
+ * Get the text of the Table of Contents from the document of the TextEditor provided. It will return an
+ * empty string if it does * not exist.
+ * @param {import("vscode").TextEditor} editor
+ * @returns {string} Table of contents
+ */
+function getText(editor) {
   let range = getRange(editor);
   if (range === undefined || range.isEmpty) {
     return "";
@@ -138,6 +160,12 @@ function getText(editor){
   return editor.document.getText(range);
 }
 
+/**
+ * Get the Code Lens for the Table of Contents from the document of the TextEditor provided. The Code Lens displays
+ * the status of the TOC (up to date/out of date) and allows the user to run a command to update the TOC by clicking it.
+ * @param {import("vscode").TextEditor} editor
+ * @returns {vscode.CodeLens} The Code Lens.
+ */
 function getCodeLens(editor) {
   let range = getRange(editor);
   if (range === undefined || range.isEmpty) {
@@ -152,5 +180,5 @@ function getCodeLens(editor) {
     title: status,
     command: "marky-markdown.addTableOfContents",
   });
-  return [lens];
+  return lens;
 }

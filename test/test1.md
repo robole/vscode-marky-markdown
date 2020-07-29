@@ -1,6 +1,7 @@
 # 1. Test Header 1
 
 Blah
+
 <!-- TOC -->
 - [2. Test Header 2](#2-test-header-2)
 - [2.1 Test Header 2.1](#21-test-header-21)

@@ -21,8 +21,11 @@ function activate(context) {
     ),
     vscode.workspace.onWillSaveTextDocument(editor.onWillSave),
     vscode.languages.registerCodeLensProvider("markdown", {
-      provideCodeLenses(document, token) {
-        return editor.getTableOfContentsCodeLens();
+      provideCodeLenses() {
+        //expects iterator of codelenses, so we comply!
+        let lenses = [];
+        lenses.push(editor.getTableOfContentsCodeLens());
+        return lenses;
       },
     })
   );

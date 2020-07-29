@@ -6,9 +6,6 @@ let settings= require("./settings");
 const PUNCTUATION_REGEXP = /[^\p{L}\p{M}\p{N}\p{Pc}\- ]/gu;
 
 module.exports = {
-  getSelectionActiveEditor,
-  getLinesOfActiveEditor,
-  getTextActiveEditor,
   slugify,
   getEndOfLine,
 };
@@ -26,63 +23,34 @@ function getEndOfLine(editor) {
   return eol;
 }
 
-//Returns selection, if seletion is empty, returns the entire document as a selection.
-function getSelectionActiveEditor() {
-  let editor = vscode.window.activeTextEditor;
-  let selection = editor.selection;
+/**
+ * Produces an ID from the text provided that can be used as an URL fragment. Replaces whitespace
+ * and non-sluggish characters with a hyphen.
+ * @param {string} text - The text to slugify.
+ * @param {string} style - The style to use to create slug, different vendors do it differently e.g. github.
+ * @returns {string} The slug.
+ */
+function slugify(text, style) {
+  let slug;
+  style = style.toLowerCase();
 
-  if (selection.isEmpty) {
-    return new vscode.Selection(0, 0, editor.document.lineCount, 0);
+  if (style === undefined) {
+    style = settings.getWorkspaceConfig().slugifyStyle;
   }
 
-  return selection;
-}
-
-//Returns the the text of entire document as an array with an entry for each line.
-function getLinesOfActiveEditor() {
-  let lines = null;
-  let text = getTextActiveEditor();
-  let endOfLineRegex = /\r?\n/g;
-
-  if (text !== null && text.length !== 0) {
-    lines = text.split(endOfLineRegex);
-  }
-
-  return lines;
-}
-
-//Returns the text of entire document.
-function getTextActiveEditor() {
-  let editor = vscode.window.activeTextEditor;
-  let text = null;
-
-  if (editor && editor.document) {
-    text = editor.document.getText();
-  }
-
-  return text;
-}
-
-//Produces an ID from text that can be used as an URL fragment. Replaces
-//whitespace and non-sluggish characters with a hyphen.
-function slugify(text, mode) {
-  let slug = undefined;
-  mode = mode.toLowerCase();
-
-  if (mode === undefined) {
-    mode = settings.getWorkspaceConfig().slugifyMode;
-  }
-
-  if (mode === "gitlab") {
+  if (style === "gitlab") {
     slug = _slugifyGitlabStyle(text);
-  } else if (mode === "github") {
+  } else if (style === "github") {
     slug = _slugifyGithubStyle(text);
   }
   return slug;
 }
 
-/*
-Based on source code: https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb
+/**
+ * Produces an ID from the text provided that can be used as an URL fragment. Does it in the same style as GitHub.
+ * Based on source code: https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb
+ * @param {string} text - The text to slugify
+ * @returns {string} The slug.
 */
 function _slugifyGithubStyle(text) {
   let slug = text.trim().toLowerCase();
@@ -90,8 +58,11 @@ function _slugifyGithubStyle(text) {
   return slug;
 }
 
-/*
-Based on source code: https://gitlab.com/gitlab-org/gitlab/-/blob/6a71a82a1a0fb3dcdc2e471027bd156b15e2be3e/lib/gitlab/utils/markdown.rb
+/**
+ * Produces an ID from the text provided that can be used as an URL fragment. Does it in the same style as GitHub.
+ * Based on source code: https://gitlab.com/gitlab-org/gitlab/-/blob/6a71a82a1a0fb3dcdc2e471027bd156b15e2be3e/lib/gitlab/utils/markdown.rb
+ * @param {string} text - The text to slugify
+ * @returns {string} The slug.
 */
 function _slugifyGitlabStyle(text) {
   let slug = text.trim().toLowerCase();
