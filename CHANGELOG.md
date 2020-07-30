@@ -5,15 +5,30 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2020-08-03
+
+### Added
+
+- Command: `Marky Markdown: Add/Update Section Numbering`.
+- Command: `Marky Markdown: Remove Section Numbering`.
+- Custom ESLint config.
+- Badges to README.md
+
+### Changed
+
+- Changed the basis of a tab to the following settings for the active editor: `Editor: Insert Spaces`, and `Editor: Detect Indentation`, and `Editor: Tab Size`.
+- Refactored code based on new ESLint config.
+- Updated *.vscodeignore* to ignore all images except the icon and ignore README.md, which reduced the size of the extension from 750KB to 65KB.
+
 ## [2.0.1] - 2020-07-29
 
 ### Added
 
-- Document code with JSDoc comments
+- Document code with JSDoc comments.
 
 ### Fixed
 
-- Issue with Update on Save operating on active documents that are not markdown files
+- Issue with Update on Save operating on active documents that are not markdown files.
 
 ## [2.0.0] - 2020-07-29
 
@@ -23,8 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Changed regexes in *heading.js* to disregard spaces at the end of the line when it is an ATX closed heading.
-- Renamed commands and properties in *package.json*.
+- Changed regexes in _heading.js_ to disregard spaces at the end of the line when it is an ATX closed heading.
+- Renamed commands and properties in _package.json_.
 - Refactored code to simplify and separate active editor logic into module.
 - Removed unnecessary options in webpack.config.js.
 

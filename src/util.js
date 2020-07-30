@@ -1,15 +1,21 @@
-let vscode = require("vscode");
-let settings= require("./settings");
+let settings = require("./settings");
 
 // Converted from `/[^\p{Word}\- ]/u`
 // `\p{Word}` => ASCII plus Letter (Ll/Lm/Lo/Lt/Lu), Mark (Mc/Me/Mn), Number (Nd/Nl/No), Connector_Punctuation (Pc)
+// eslint-disable-next-line node/no-unsupported-features/es-syntax
 const PUNCTUATION_REGEXP = /[^\p{L}\p{M}\p{N}\p{Pc}\- ]/gu;
 
 module.exports = {
   slugify,
   getEndOfLine,
+  getTab,
 };
 
+/**
+ * Get the End Of Line sequence (LR or CRLF) for the editor provided.
+ * @param {import("vscode").TextEditor} editor
+ * @returns {string} End of Line sequence
+ */
 function getEndOfLine(editor) {
   let eolTypeEnum = editor.document.eol;
   let eol = "";
@@ -32,16 +38,16 @@ function getEndOfLine(editor) {
  */
 function slugify(text, style) {
   let slug;
-  style = style.toLowerCase();
+  let selectedStyle = style.toLowerCase();
 
   if (style === undefined) {
-    style = settings.getWorkspaceConfig().slugifyStyle;
+    selectedStyle = settings.getWorkspaceConfig().slugifyStyle;
   }
 
-  if (style === "gitlab") {
-    slug = _slugifyGitlabStyle(text);
-  } else if (style === "github") {
-    slug = _slugifyGithubStyle(text);
+  if (selectedStyle === "gitlab") {
+    slug = slugifyGitlabStyle(text);
+  } else if (selectedStyle === "github") {
+    slug = slugifyGithubStyle(text);
   }
   return slug;
 }
@@ -51,8 +57,8 @@ function slugify(text, style) {
  * Based on source code: https://github.com/jch/html-pipeline/blob/master/lib/html/pipeline/toc_filter.rb
  * @param {string} text - The text to slugify
  * @returns {string} The slug.
-*/
-function _slugifyGithubStyle(text) {
+ */
+function slugifyGithubStyle(text) {
   let slug = text.trim().toLowerCase();
   slug = slug.replace(PUNCTUATION_REGEXP, "").replace(/ /g, "-");
   return slug;
@@ -63,15 +69,34 @@ function _slugifyGithubStyle(text) {
  * Based on source code: https://gitlab.com/gitlab-org/gitlab/-/blob/6a71a82a1a0fb3dcdc2e471027bd156b15e2be3e/lib/gitlab/utils/markdown.rb
  * @param {string} text - The text to slugify
  * @returns {string} The slug.
-*/
-function _slugifyGitlabStyle(text) {
+ */
+function slugifyGitlabStyle(text) {
   let slug = text.trim().toLowerCase();
 
   slug = slug
     .replace(PUNCTUATION_REGEXP, "")
     .replace(/ /g, "-")
     // Remove any duplicate separators
-    .replace(/\-{2,}?/g, "-")
+    .replace(/-{2,}?/g, "-")
     .replace(/^(\d+)$/, "anchor-$1"); // digits-only hrefs conflict with issue refs
   return slug;
+}
+/**
+ * Get the tab sequence (spaces or tab) for the editor provided.
+ * @param {import("vscode").TextEditor} editor
+ * @returns {string} Tab sequence
+ */
+function getTab(editor) {
+  let tab;
+  let { insertSpaces } = editor.options;
+  let { tabSize } = editor.options;
+
+  if (insertSpaces) {
+    // @ts-ignore
+    tab = " ".repeat(tabSize);
+  } else {
+    tab = "\t";
+  }
+
+  return tab;
 }

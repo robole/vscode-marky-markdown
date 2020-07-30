@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved, node/no-missing-require
 const vscode = require("vscode");
 const editor = require("./activeeditor");
 
@@ -19,11 +20,19 @@ function activate(context) {
       "marky-markdown.removeTableOfContents",
       editor.removeTableOfContents
     ),
+    vscode.commands.registerCommand(
+      "marky-markdown.addSectionNumbering",
+      editor.addSectionNumbering
+    ),
+    vscode.commands.registerCommand(
+      "marky-markdown.removeSectionNumbering",
+      editor.removeSectionNumbering
+    ),
     vscode.workspace.onWillSaveTextDocument(editor.onWillSave),
     vscode.languages.registerCodeLensProvider("markdown", {
       provideCodeLenses() {
-        //expects iterator of codelenses, so we comply!
-        let lenses = [];
+        // expects iterator of codelenses, so we comply!
+        const lenses = [];
         lenses.push(editor.getTableOfContentsCodeLens());
         return lenses;
       },

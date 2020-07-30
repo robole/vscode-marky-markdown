@@ -1,8 +1,6 @@
 const assert = require("assert");
 const heading = require("../../src/heading");
 
-let lines = null;
-
 describe("heading", function () {
   describe("getLevel()", function () {
     it("should get the level of the heading", function () {

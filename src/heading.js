@@ -1,12 +1,6 @@
-const vscode = require("vscode");
-const markdown = require("./markdown");
-const util = require("./util");
-const settings = require("./settings");
-
 const MARKDOWN_CHAR = "#";
 
 module.exports = {
-  getGlobalGroupedRegex,
   getGroupedRegex,
   getRegex,
   getLevel,
@@ -14,17 +8,24 @@ module.exports = {
 };
 
 /**
- * Global, multiline regex to find ATX heading styles based on a range of heading levels. The content is grouped:
- * group 0 = entire match, group 1 = opening markdown characters, group 2 = link including image,
- * group 3 = text, group 4 = optional closing markdown characters.
+ * Regex to find ATX heading styles based on a range of heading levels. The content is grouped with the following indexes:
+ *    0 = entire match, 1 = opening markdown characters. 2 = link including image,
+ *    3 = entire section numbering, 4 = Number only part of section numbering (excludes space), 5 = text, 6 = closing markdown characters.
  *
  * The raw regex would look something like this:
- * /^(\s*#{1,6}\s*)(\[.*\]\(.*?\))(.*?)(\\s?#{0,6}\s*)$/gm
+ * ^(\s*\#{1,6}\s*)(\[.*\]\(.*?\)\s*)(\d+\.)+\s)*(.*?)(\s?#{0,6}\s*)$
  * @param {number} fromLevel - Heading level
  * @param {number} toLevel - Heading level.
+ * @param {string} flags - The flags that you pass to a regex e.g. g for global. Optional.
  */
-function getGlobalGroupedRegex(fromLevel, toLevel) {
+function getGroupedRegex(fromLevel, toLevel, flags) {
+  let flagsToUse = "";
+  if (flags !== undefined) {
+    flagsToUse = flags;
+  }
+
   return new RegExp(
+    // eslint-disable-next-line prefer-template
     "^(\\s*" +
       MARKDOWN_CHAR +
       "{" +
@@ -32,40 +33,29 @@ function getGlobalGroupedRegex(fromLevel, toLevel) {
       "," +
       toLevel +
       "}" +
-      "\\s+?)(\\[.*\\]\\(.*?\\)\\s*)*(.*?)(\\s?" +
+      "\\s+?)(\\[.*\\]\\(.*?\\)\\s*)*((\\d+\\.)+\\s)*(.*?)(\\s?" +
       MARKDOWN_CHAR +
       "{0,6}\\s*)$",
-    "gm"
+    flagsToUse
   );
 }
 
 /**
- * Regex to find ATX heading styles based on a range of heading levels. The content is grouped:
- *    group 0 = entire match, group 1 = opening markdown characters, group 2 = link including image.
- *    group 3 = text, group 4 = optional closing markdown characters.
- *
- * The raw regex would look something like this:
- * ^(\s*\#{1,6}\s*)(\[.*\]\(.*?\))(.*?)(\s?#{0,6}\s*)$
+ * Regex to find ATX heading styles based on a range of heading levels.
  * @param {number} fromLevel - Heading level
  * @param {number} toLevel - Heading level.
+ * @param {string} flags - The flags that you pass to a regex e.g. g for global. Optional.
  */
-function getGroupedRegex(fromLevel, toLevel) {
-  return new RegExp(
-    "^(\\s*" +
-      MARKDOWN_CHAR +
-      "{" +
-      fromLevel +
-      "," +
-      toLevel +
-      "}" +
-      "\\s+?)(\\[.*\\]\\(.*?\\)\\s*)*(.*?)(\\s?" +
-      MARKDOWN_CHAR +
-      "{0,6}\\s*)$"
-  );
-}
+function getRegex(fromLevel, toLevel, flags) {
+  let flagsToUse = "";
+  if (flags !== undefined) {
+    flagsToUse = flags;
+  }
 
-function getRegex(fromLevel, toLevel) {
-  return new RegExp(`^${MARKDOWN_CHAR}{${fromLevel},${toLevel}}\\s.*`, "gm");
+  return new RegExp(
+    `^${MARKDOWN_CHAR}{${fromLevel},${toLevel}}\\s.*`,
+    flagsToUse
+  );
 }
 
 function getLevel(heading) {
@@ -88,6 +78,7 @@ function stripMarkdown(heading) {
   let text = "";
 
   if (result !== null) {
+    // eslint-disable-next-line prefer-destructuring
     text = result[3];
   }
 

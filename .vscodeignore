@@ -8,5 +8,6 @@ test
 **/.eslintrc.json
 src
 webpack.config.js
-img/icon/icon-2500x2500.png
-**/*.xcf
+img/**
+!img/icon/icon-500x500.png
+readme.md

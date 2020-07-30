@@ -7,7 +7,7 @@ function run() {
   const mocha = new Mocha({
     ui: "bdd",
     color: true,
-    timeout:2000
+    timeout: 2000,
   });
   mocha.set;
 

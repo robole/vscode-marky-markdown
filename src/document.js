@@ -1,4 +1,3 @@
-const vscode = require("vscode");
 const heading = require("./heading");
 const util = require("./util");
 const markdown = require("./markdown");
@@ -7,17 +6,19 @@ module.exports = {
   addBookmarks,
   removeBookmarks,
   hasBookmarks,
+  addSectionNumbering,
+  removeSectionNumbering,
   getHeadings,
   getGroupedHeadings,
 };
 
 /**
-* Scans the contents of the text provided to check if it has bookmarks based on a range of heading levels.
-* @param {string} text - Text to search
-* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-* @param {number} toLevel - The end of the heading level range which you want to include (least important).
-* @returns {boolean}
-*/
+ * Scans the contents of the text to check if it has bookmarks based on the provided range of heading levels.
+ * @param {string} text - Text to search
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ * @returns {boolean}
+ */
 function hasBookmarks(text, fromLevel, toLevel) {
   const headings = getGroupedHeadings(text, fromLevel, toLevel);
 
@@ -25,8 +26,9 @@ function hasBookmarks(text, fromLevel, toLevel) {
     return false;
   }
 
-  for (const heading of headings) {
-    if (heading[2] !== undefined) {
+  // eslint-disable-next-line no-restricted-syntax
+  for (const currHeading of headings) {
+    if (currHeading[2] !== undefined) {
       return true;
     }
   }
@@ -34,14 +36,14 @@ function hasBookmarks(text, fromLevel, toLevel) {
 }
 
 /**
-* Add bookmark links to the headings based on the provided parameters.
-* @param {Array} lines - An array of the lines of the document
-* @param {String} imagePath - The path of the image you want to provide. This is optional.
-* @param {String} linkText - The text you would like to have for the bookmark link.
-* @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
-* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-* @param {number} toLevel - The end of the heading level range which you want to include (least important).
-*/
+ * Add bookmark links to the headings based on the provided parameters.
+ * @param {Array} lines - An array of the lines of the document
+ * @param {String} imagePath - The path of the image you want to provide. This is optional.
+ * @param {String} linkText - The text you would like to have for the bookmark link.
+ * @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ */
 function addBookmarks(
   lines,
   imagePath,
@@ -50,56 +52,182 @@ function addBookmarks(
   fromLevel,
   toLevel
 ) {
+  // @ts-ignore
   const regex = heading.getGroupedRegex(fromLevel, toLevel);
+  const updatedLines = [];
 
-  lines.forEach(function (line, i) {
+  lines.forEach(function (line) {
     const result = regex.exec(line);
 
-    if (result != null) {
-      const openingMarkdown = result[1];
-      const headingText = result[3];
-      const closingMarkdown = result[4];
+    if (result === null) {
+      updatedLines.push(line);
+    } else {
+      let [
+        ,
+        openingMarkdown,
+        ,
+        sectionNumber,
+        ,
+        headingText,
+        closingMarkdown,
+      ] = result;
       const id = util.slugify(linkText + headingText, slugifyStyle);
+      const bookmark = createLink(id, linkText, imagePath);
 
-      const link = _createLink(id, linkText, imagePath);
-      lines[i] = `${openingMarkdown}${link} ${headingText}${closingMarkdown}`;
+      if (sectionNumber === undefined && bookmark.length === 0) {
+        updatedLines.push(`${openingMarkdown}${headingText}${closingMarkdown}`);
+      } else if (sectionNumber !== undefined && bookmark.length === 0) {
+        updatedLines.push(
+          `${openingMarkdown}${sectionNumber}${headingText}${closingMarkdown}`
+        );
+      } else if (sectionNumber === undefined && bookmark.length > 0) {
+        updatedLines.push(
+          `${openingMarkdown}${bookmark} ${headingText}${closingMarkdown}`
+        );
+      } else if (sectionNumber !== undefined && bookmark.length > 0) {
+        updatedLines.push(
+          `${openingMarkdown}${bookmark} ${sectionNumber}${headingText}${closingMarkdown}`
+        );
+      }
     }
   });
-  return lines;
+  return updatedLines;
 }
 
 /**
-* Remove bookmark links from the array provided based on the heading range provided.
-* @param {Array} lines - An array of the lines of the document
-* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-* @param {number} toLevel - The end of the heading level range which you want to include (least important).
-*
-*/
+ * Remove bookmark links from the array provided based on the heading range provided.
+ * @param {Array} lines - An array of the lines of the document
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ *
+ */
 function removeBookmarks(lines, fromLevel, toLevel) {
+  // @ts-ignore
   const regex = heading.getGroupedRegex(fromLevel, toLevel);
+  const updatedLines = [];
 
-  lines.forEach(function (line, i) {
+  lines.forEach(function (line) {
     const result = regex.exec(line);
 
     if (result != null) {
-      const openingMarkdown = result[1];
-      const headingText = result[3];
-      const closingMarkdown = result[4];
-
-      lines[i] = openingMarkdown + headingText + closingMarkdown;
+      let [
+        ,
+        openingMarkdown,
+        ,
+        numbering,
+        ,
+        headingText,
+        closingMarkdown,
+      ] = result;
+      if (numbering) {
+        updatedLines.push(
+          `${openingMarkdown}${numbering}${headingText}${closingMarkdown}`
+        );
+      } else {
+        updatedLines.push(`${openingMarkdown}${headingText}${closingMarkdown}`);
+      }
+    } else {
+      updatedLines.push(line);
     }
   });
-  return lines;
+  return updatedLines;
 }
 
 /**
-* Creates a markdown link based on the inputs.
-* @param {string} id - The ID of the heading
-* @param {string} text - The link text. One of text or imagePath is expected.
-* @param {string} imagePath - The path to an image. One of text or imagePath is expected.
-* @returns {string} The markdown link
-*/
-function _createLink(id, text, imagePath) {
+ * Add section numbering to the headings based on the provided parameters.
+ * @param {Array} lines - An array of the lines of the document
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ */
+function addSectionNumbering(lines, fromLevel, toLevel) {
+  // @ts-ignore
+  const regex = heading.getGroupedRegex(fromLevel, toLevel);
+  const updatedLines = [];
+  const sectionCount = [0, 0, 0, 0, 0, 0];
+
+  lines.forEach(function (line) {
+    const result = regex.exec(line);
+
+    if (result === null) {
+      updatedLines.push(line);
+    } else {
+      const level = heading.getLevel(line);
+      sectionCount[level - 1] += 1;
+      const sectionNumber = [...Array(level - fromLevel + 1).keys()]
+        .map((num) => `${sectionCount[num + fromLevel - 1]}.`)
+        .join("");
+
+      let [
+        ,
+        openingMarkdown,
+        bookmark,
+        ,
+        ,
+        headingText,
+        closingMarkdown,
+      ] = result;
+
+      if (bookmark) {
+        updatedLines.push(
+          `${openingMarkdown}${bookmark}${sectionNumber} ${headingText}${closingMarkdown}`
+        );
+      } else {
+        updatedLines.push(
+          `${openingMarkdown}${sectionNumber} ${headingText}${closingMarkdown}`
+        );
+      }
+    }
+  });
+  return updatedLines;
+}
+
+/**
+ * Remove section numbering from the headings based on the provided parameters.
+ * @param {Array} lines - An array of the lines of the document.
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ */
+function removeSectionNumbering(lines, fromLevel, toLevel) {
+  // @ts-ignore
+  const regex = heading.getGroupedRegex(fromLevel, toLevel);
+  const updatedLines = [];
+
+  lines.forEach(function (line) {
+    const result = regex.exec(line);
+
+    if (result === null) {
+      updatedLines.push(line);
+    } else {
+      let [
+        ,
+        openingMarkdown,
+        bookmark,
+        ,
+        ,
+        headingText,
+        closingMarkdown,
+      ] = result;
+
+      if (bookmark === undefined) {
+        updatedLines.push(`${openingMarkdown}${headingText}${closingMarkdown}`);
+      } else {
+        updatedLines.push(
+          `${openingMarkdown}${bookmark}${headingText}${closingMarkdown}`
+        );
+      }
+    }
+  });
+  return updatedLines;
+}
+
+/**
+ * Creates a markdown link based on the inputs.
+ * @param {string} id - The ID of the heading
+ * @param {string} text - The link text. One of text or imagePath is expected.
+ * @param {string} imagePath - The path to an image. One of text or imagePath is expected.
+ * @returns {string} The markdown link
+ */
+function createLink(id, text, imagePath) {
   const img = markdown.image("", imagePath);
   let link = "";
 
@@ -117,37 +245,46 @@ function _createLink(id, text, imagePath) {
 }
 
 /**
-* Get an array of the headings from the text provided based on the range provided.
-* @param {string} text - Text to search
-* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-* @param {number} toLevel - The end of the heading level range which you want to include (least important).
-* @returns {Array} Array of headings found.
-*/
+ * Get an array of the headings from the text provided based on the range provided.
+ * @param {string} text - Text to search
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include
+ * (least important). Optional. Default is 6.
+ * @returns {Array} Array of headings found.
+ */
 function getHeadings(text, fromLevel, toLevel) {
-  if (toLevel === undefined) {
-    toLevel = 6;
+  let headings = [];
+
+  let to = 6;
+  if (toLevel !== undefined) {
+    to = toLevel;
   }
 
-  const regex = heading.getRegex(fromLevel, toLevel);
-  const matches = text.match(regex);
-  return matches;
+  const regex = heading.getRegex(fromLevel, to, "gm");
+  const result = text.match(regex);
+  if (result !== null) {
+    headings = result;
+  }
+  return headings;
 }
 
 /**
-* Get an 2D array of the headings from the text provided based on the range provided. The subarray contains entries
-* representing the constituent parts of the heading: 0. the whole heading, 1. the opening markdown, 2. bookmark link,
-* 3. text, 4. closing markdown if it exists
-* @param {string} text - Text to search
-* @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-* @param {number} toLevel - The end of the heading level range which you want to include (least important).
-* @returns {Array} Array of headings found.
-*/
+ * Get an 2D array of the headings from the text provided based on the range provided. The subarray contains entries
+ * representing the constituent parts of the heading: 0. the whole heading, 1. the opening markdown, 2. bookmark link,
+ * 3. text, 4. closing markdown if it exists
+ * @param {string} text - Text to search
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ * This is optional. The default is 6.
+ * @returns {Array} Array of headings found.
+ */
 function getGroupedHeadings(text, fromLevel, toLevel) {
-  if (toLevel === undefined) {
-    toLevel = 6;
+  let to = 6;
+  if (toLevel !== undefined) {
+    to = toLevel;
   }
 
-  const regex = heading.getGlobalGroupedRegex(fromLevel, toLevel);
+  const regex = heading.getGroupedRegex(fromLevel, to, "gm");
   // @ts-ignore
   const matches = text.matchAll(regex);
   return [...matches];

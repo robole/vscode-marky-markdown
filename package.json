@@ -7,7 +7,7 @@
   },
   "description": "A funky bunch of methods for writing markdown more easily.",
   "icon": "img/icon/icon-500x500.png",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -33,11 +33,7 @@
   },
   "license": "MIT",
   "activationEvents": [
-    "onLanguage:markdown",
-    "onCommand:marky-markdown.addHeadingLinks",
-    "onCommand:marky-markdown.removeHeadingLinks",
-    "onCommand:marky-markdown.addTableOfContents",
-    "onCommand:marky-markdown.removeTableOfContents"
+    "onLanguage:markdown"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -57,6 +53,14 @@
       {
         "command": "marky-markdown.removeTableOfContents",
         "title": "Marky Markdown: Remove the Table of Contents (TOC)"
+      },
+      {
+        "command": "marky-markdown.addSectionNumbering",
+        "title": "Marky Markdown: Add/Update Section Numbering"
+      },
+      {
+        "command": "marky-markdown.removeSectionNumbering",
+        "title": "Marky Markdown: Remove Section Numbering"
       }
     ],
     "configuration": {
@@ -79,6 +83,13 @@
           "type": "string",
           "default": "",
           "description": "Add an image to the heading bookmark. If both text and an image are specified, the image will come first."
+        },
+        "markyMarkdown.sectionNumbering.levelRange": {
+          "type": "string",
+          "default": "2..6",
+          "description": "Select the range of heading levels (from most important to least important) to which section numbering is added. For example, having a range of '2..6' includes headings from level 2 to level 6.",
+          "pattern": "([1-6]{1})\\.\\.([1-6]{1})",
+          "patternErrorMessage": "Must define a range of numbers in the format of '2..6'. The numbers must be between 1 and 6. The first number should be greater than or equal to the second number."
         },
         "markyMarkdown.tableOfContents.levelRange": {
           "type": "string",
@@ -110,8 +121,9 @@
     }
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
+    "lint": "eslint src/.",
+    "lint:fix": "eslint --fix src/.",
+    "format": "npx prettier --write .",
     "test": "node ./test/runTest.js",
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch",
@@ -126,9 +138,10 @@
     "chai": "^4.2.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-config-roboleary-node": "0.0.2",
     "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-node": "^11.1.0",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
     "prettier": "^2.0.5",
