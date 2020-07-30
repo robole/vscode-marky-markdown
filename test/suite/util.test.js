@@ -1,9 +1,9 @@
+let assert = require("assert");
 const util = require("../../src/util");
-var assert = require("assert");
 
 describe("util", function () {
   describe("slugify()", function () {
-    //github mode
+    // github mode
     it("should slugify 'github' mode by creating a trimmed, lowercase, hypenated version of the string", () => {
       assert.equal(
         util.slugify(" Robole Github com ", "github"),
@@ -26,7 +26,7 @@ describe("util", function () {
       assert.equal(util.slugify("ha 🐇-👎", "github"), "ha--");
     });
 
-    //gitlab mode
+    // gitlab mode
     it("should slugify 'gitlab' mode by creating a trimmed, lowercase, hypenated version (only 1 hypen allowed between words) of the string", () => {
       assert.equal(util.slugify("  robole  com p ", "gitlab"), "robole-com-p");
     });

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved, node/no-missing-require
 const vscode = require("vscode");
 
 module.exports = {
@@ -6,46 +7,53 @@ module.exports = {
 };
 
 /**
-* Get a config object with the properties related to this extension
-* @returns {object} Custom config object
-*/
+ * Get a config object with the properties related to this extension
+ * @returns {object} Custom config object
+ */
 function getWorkspaceConfig() {
   let config = {};
 
-  const bookmarks = vscode.workspace.getConfiguration("markyMarkdown.bookmarks");
+  const bookmarks = vscode.workspace.getConfiguration(
+    "markyMarkdown.bookmarks"
+  );
   config.bookmarksLinkText = bookmarks.get("linkText");
   config.bookmarksLinkImagePath = bookmarks.get("linkImagePath");
 
   let levelRange = bookmarks.get("levelRange");
   let levels = getLevels(levelRange);
-  config.bookmarksFromLevel = levels[0];
-  config.bookmarksToLevel = levels[1];
+  [config.bookmarksFromLevel, config.bookmarksToLevel] = levels;
 
   const toc = vscode.workspace.getConfiguration(
     "markyMarkdown.tableOfContents"
   );
   let tocLevelRange = toc.get("levelRange");
   let tocLevels = getLevels(tocLevelRange);
-  config.tableOfContentsFromLevel = tocLevels[0];
-  config.tableOfContentsToLevel = tocLevels[1];
+  [config.tableOfContentsFromLevel, config.tableOfContentsToLevel] = tocLevels;
 
   config.tableOfContentsLabel = toc.get("label");
 
-  config.updateOnSave = vscode.workspace.getConfiguration(
-    "markyMarkdown"
-  ).get("updateOnSave");
-  config.slugifyStyle = vscode.workspace.getConfiguration(
-    "markyMarkdown"
-  ).get("slugifyStyle");
+  const numbering = vscode.workspace.getConfiguration(
+    "markyMarkdown.sectionNumbering"
+  );
+  let sectionLevelRange = numbering.get("levelRange");
+  let sectionLevels = getLevels(sectionLevelRange);
+  [config.numberingFromLevel, config.numberingToLevel] = sectionLevels;
+
+  config.updateOnSave = vscode.workspace
+    .getConfiguration("markyMarkdown")
+    .get("updateOnSave");
+  config.slugifyStyle = vscode.workspace
+    .getConfiguration("markyMarkdown")
+    .get("slugifyStyle");
 
   return config;
 }
 
 /**
-* Helper function to get the levels from a range which is a setting option in the configuration
-* @param {number} levelRange - Range in the form "1..6"
-* @returns {Array} Array with the fromLevel as the first entry, and toLevel as the second entry
-*/
+ * Helper function to get the levels from a range which is a setting option in the configuration
+ * @param {string} levelRange - Range in the form "1..6"
+ * @returns {Array} Array with the fromLevel as the first entry, and toLevel as the second entry
+ */
 function getLevels(levelRange) {
   let regex = /([1-6]{1})\.\.([1-6]{1})/;
   let result = regex.exec(levelRange);

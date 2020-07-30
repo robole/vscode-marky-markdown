@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved, node/no-missing-require
 const vscode = require("vscode");
 const heading = require("./heading");
 const util = require("./util");
@@ -10,8 +11,6 @@ const REGEX_TOC_START = /(.*?)<!--\s*TOC\s*-->/gi;
 const TOC_START = `<!-- TOC -->`;
 const REGEX_TOC_END = /\s*<!--\s*\/TOC\s*-->/gi;
 const TOC_END = `<!-- /TOC -->`;
-const TAB = "\t";
-const defaultEOL = "\r\n";
 
 module.exports = {
   create,
@@ -32,8 +31,8 @@ function getRange(editor) {
   }
 
   let doc = editor.document;
-  let start = undefined,
-    end = undefined;
+  let start;
+  let end;
 
   for (let lineNo = 0; lineNo < doc.lineCount; lineNo++) {
     let lineText = doc.lineAt(lineNo).text;
@@ -64,23 +63,24 @@ function getRange(editor) {
   }
 
   if (start !== undefined && end === undefined) {
-    return undefined; //TOC end delimiter was deleted
+    return undefined; // TOC end delimiter was deleted
   }
 
   return new vscode.Range(start, end);
 }
 
 /**
-* Create a Table of Contents based on the inputs.
-*  @param {string} text - The text to create the TOC from.
-*  @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
-*  @param {number} toLevel - The end of the heading level range which you want to include (least important).
-* @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
-*  @param {String} label - A lable to add to the top of the TOC. This is optional.
-*  @param {String} endOfLine - The end of line characters to use
-*  @returns {string} Table of Contents
+ * Create a Table of Contents based on the inputs.
+ *  @param {string} text - The text to create the TOC from.
+ *  @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ *  @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ *  @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
+ *  @param {String} label - A label to add to the top of the TOC.
+ *  @param {String} tab - What characters represent a tab for indentation.
+ *  @param {String} endOfLine - The end of line characters to use to separate each item
+ *  @returns {string} Table of Contents
  */
-function create(text, fromLevel, toLevel, slugifyStyle, label, endOfLine) {
+function create(text, fromLevel, toLevel, slugifyStyle, label, tab, endOfLine) {
   let headings = document.getGroupedHeadings(text, fromLevel, toLevel);
   let toc = [];
   toc.push(TOC_START);
@@ -89,32 +89,26 @@ function create(text, fromLevel, toLevel, slugifyStyle, label, endOfLine) {
     toc.push(label);
   }
 
-  for (const currHeading of headings) {
+  headings.forEach(function (currHeading) {
     let level = heading.getLevel(currHeading[0]);
-    let headingText = currHeading[3];
+    let sectionNumbering = currHeading[3];
+    let headingText = currHeading[5];
+    let linkText = headingText;
 
-    let id = util.slugify(headingText, slugifyStyle);
-    let link = markdown.link(headingText, "#" + id);
-    let item = "";
-
-    for (let i = fromLevel; i < level; i++) {
-      item += TAB;
+    if (sectionNumbering !== undefined) {
+      linkText = sectionNumbering + headingText;
     }
 
-    item = item + MARKDOWN_LIST_ITEM + " " + link;
+    let id = util.slugify(linkText, slugifyStyle);
+    let link = markdown.link(linkText, `#${id}`);
+    let item = "";
+    item += tab.repeat(level - fromLevel);
+    item = `${item + MARKDOWN_LIST_ITEM} ${link}`;
     toc.push(item);
-  }
+  });
 
   toc.push(TOC_END);
-
-  let tocString = "";
-
-  if (endOfLine && endOfLine.length > 0) {
-    tocString = toc.join(endOfLine);
-  } else {
-    tocString = toc.join(defaultEOL);
-  }
-
+  let tocString = toc.join(endOfLine);
   return tocString;
 }
 
@@ -126,13 +120,13 @@ function create(text, fromLevel, toLevel, slugifyStyle, label, endOfLine) {
 function isUpToDate(editor) {
   let range = getRange(editor);
   if (range.isEmpty) {
-    return;
+    return false;
   }
 
-  var currentToc = editor.document.getText(range);
-
-  var text = editor.document.getText();
+  let currentToc = editor.document.getText(range);
+  let text = editor.document.getText();
   let config = settings.getWorkspaceConfig();
+  let tab = util.getTab(editor);
   let endOfLine = util.getEndOfLine(editor);
   let toc = create(
     text,
@@ -140,6 +134,7 @@ function isUpToDate(editor) {
     config.tableOfContentsToLevel,
     config.slugifyStyle,
     config.tableOfContentsLabel,
+    tab,
     endOfLine
   );
 
@@ -169,12 +164,17 @@ function getText(editor) {
 function getCodeLens(editor) {
   let range = getRange(editor);
   if (range === undefined || range.isEmpty) {
-    return;
+    return null;
   }
 
   let upToDate = isUpToDate(editor);
   let status = "";
-  upToDate ? (status = "up to date :-)") : (status = "out of date :-(");
+
+  if (upToDate) {
+    status = "up to date :-)";
+  } else {
+    status = "out of date :-(";
+  }
 
   let lens = new vscode.CodeLens(range, {
     title: status,

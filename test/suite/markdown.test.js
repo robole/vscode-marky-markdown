@@ -1,6 +1,5 @@
+let assert = require("assert");
 const markdown = require("../../src/markdown");
-var assert = require("assert");
-
 
 describe("markdown", function () {
   describe("image()", function () {

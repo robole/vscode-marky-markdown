@@ -1,5 +1,5 @@
+let { expect } = require("chai");
 const settings = require("../../src/settings");
-var expect = require("chai").expect;
 
 describe("settings", function () {
   describe("getLevels()", function () {
