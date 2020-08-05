@@ -8,6 +8,7 @@ module.exports = {
   hasBookmarks,
   addSectionNumbering,
   removeSectionNumbering,
+  hasSectionNumbering,
   getHeadings,
   getGroupedHeadings,
 };
@@ -29,6 +30,29 @@ function hasBookmarks(text, fromLevel, toLevel) {
   // eslint-disable-next-line no-restricted-syntax
   for (const currHeading of headings) {
     if (currHeading[2] !== undefined) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Scans the contents of the text to check if it has section numbers based on the provided range of heading levels.
+ * @param {string} text - Text to search
+ * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
+ * @param {number} toLevel - The end of the heading level range which you want to include (least important).
+ * @returns {boolean}
+ */
+function hasSectionNumbering(text, fromLevel, toLevel) {
+  const headings = getGroupedHeadings(text, fromLevel, toLevel);
+
+  if (headings === null) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const currHeading of headings) {
+    if (currHeading[3] !== undefined) {
       return true;
     }
   }
@@ -252,15 +276,10 @@ function createLink(id, text, imagePath) {
  * (least important). Optional. Default is 6.
  * @returns {Array} Array of headings found.
  */
-function getHeadings(text, fromLevel, toLevel) {
+function getHeadings(text, fromLevel, toLevel = 6) {
   let headings = [];
 
-  let to = 6;
-  if (toLevel !== undefined) {
-    to = toLevel;
-  }
-
-  const regex = heading.getRegex(fromLevel, to, "gm");
+  const regex = heading.getRegex(fromLevel, toLevel, "gm");
   const result = text.match(regex);
   if (result !== null) {
     headings = result;
@@ -278,13 +297,8 @@ function getHeadings(text, fromLevel, toLevel) {
  * This is optional. The default is 6.
  * @returns {Array} Array of headings found.
  */
-function getGroupedHeadings(text, fromLevel, toLevel) {
-  let to = 6;
-  if (toLevel !== undefined) {
-    to = toLevel;
-  }
-
-  const regex = heading.getGroupedRegex(fromLevel, to, "gm");
+function getGroupedHeadings(text, fromLevel, toLevel = 6) {
+  const regex = heading.getGroupedRegex(fromLevel, toLevel, "gm");
   // @ts-ignore
   const matches = text.matchAll(regex);
   return [...matches];

@@ -6,7 +6,6 @@ const settings = require("./settings");
 const markdown = require("./markdown");
 const document = require("./document");
 
-const MARKDOWN_LIST_ITEM = "-";
 const REGEX_TOC_START = /(.*?)<!--\s*TOC\s*-->/gi;
 const TOC_START = `<!-- TOC -->`;
 const REGEX_TOC_END = /\s*<!--\s*\/TOC\s*-->/gi;
@@ -76,17 +75,32 @@ function getRange(editor) {
  *  @param {number} toLevel - The end of the heading level range which you want to include (least important).
  *  @param {String} slugifyStyle - An enum value to specify the slug style e.g. "github".
  *  @param {String} label - A label to add to the top of the TOC.
+ *  @param {String} listType - The list type (unordered list, ordered list)
  *  @param {String} tab - What characters represent a tab for indentation.
  *  @param {String} endOfLine - The end of line characters to use to separate each item
  *  @returns {string} Table of Contents
  */
-function create(text, fromLevel, toLevel, slugifyStyle, label, tab, endOfLine) {
+function create(
+  text,
+  fromLevel,
+  toLevel,
+  slugifyStyle,
+  label,
+  listType,
+  tab,
+  endOfLine
+) {
   let headings = document.getGroupedHeadings(text, fromLevel, toLevel);
   let toc = [];
+  let listMarkdown = "-";
   toc.push(TOC_START);
 
   if (label && label.length > 0) {
     toc.push(label);
+  }
+
+  if (listType === "ordered list") {
+    listMarkdown = "1.";
   }
 
   headings.forEach(function (currHeading) {
@@ -103,7 +117,7 @@ function create(text, fromLevel, toLevel, slugifyStyle, label, tab, endOfLine) {
     let link = markdown.link(linkText, `#${id}`);
     let item = "";
     item += tab.repeat(level - fromLevel);
-    item = `${item + MARKDOWN_LIST_ITEM} ${link}`;
+    item = `${item + listMarkdown} ${link}`;
     toc.push(item);
   });
 
@@ -134,6 +148,7 @@ function isUpToDate(editor) {
     config.tableOfContentsToLevel,
     config.slugifyStyle,
     config.tableOfContentsLabel,
+    config.tableOfContentsListType,
     tab,
     endOfLine
   );

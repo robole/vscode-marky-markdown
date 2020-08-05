@@ -31,6 +31,7 @@ function getWorkspaceConfig() {
   [config.tableOfContentsFromLevel, config.tableOfContentsToLevel] = tocLevels;
 
   config.tableOfContentsLabel = toc.get("label");
+  config.tableOfContentsListType = toc.get("listType");
 
   const numbering = vscode.workspace.getConfiguration(
     "markyMarkdown.sectionNumbering"

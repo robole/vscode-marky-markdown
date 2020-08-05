@@ -100,6 +100,22 @@ function hasBookmarks() {
 }
 
 /**
+ * Scans the contents of the document in the Active Editor to check if the headings have section numbers.
+ * @returns {boolean}
+ */
+function hasSectionNumbering() {
+  const editor = vscode.window.activeTextEditor;
+  const text = editor.document.getText();
+  const config = settings.getWorkspaceConfig();
+
+  return doc.hasSectionNumbering(
+    text,
+    config.numberingFromLevel,
+    config.numberingToLevel
+  );
+}
+
+/**
  * Get an array of the headings from the document in the Active Editor based on the range provided.
  * @param {number} fromLevel - The beginning of the heading level range which you want to include (most important).
  * @param {number} toLevel - The end of the heading level range which you want to include (least important).
@@ -147,6 +163,7 @@ async function addTableOfContents() {
     config.tableOfContentsToLevel,
     config.slugifyStyle,
     config.tableOfContentsLabel,
+    config.tableOfContentsListType,
     util.getTab(editor),
     endOfLine
   );
@@ -192,6 +209,7 @@ async function updateTableOfContents() {
     config.tableOfContentsToLevel,
     config.slugifyStyle,
     config.tableOfContentsLabel,
+    config.tableOfContentsListType,
     util.getTab(editor),
     endOfLine
   );
@@ -318,30 +336,15 @@ async function onWillSave(textDocumentWillSaveEvent) {
 
 /**
  * @async
- * Updates the dynamic contents (bookmarks, table of contents) of the document in the Active Editor
+ * Updates the dynamic contents (bookmarks, table of contents, section numbers) of the document in the Active Editor
  *  if the "Update on Save" setting is selected in the Configuration.
  */
 async function updateOnSave() {
   const editor = vscode.window.activeTextEditor;
   const config = settings.getWorkspaceConfig();
   let text = editor.document.getText();
-  const tocString = toc.getText(editor);
   const endOfLine = util.getEndOfLine(editor);
   let updated = false;
-
-  if (tocString.length > 0) {
-    const updatedToc = toc.create(
-      text,
-      config.tableOfContentsFromLevel,
-      config.tableOfContentsToLevel,
-      config.slugifyStyle,
-      config.tableOfContentsLabel,
-      util.getTab(editor),
-      endOfLine
-    );
-    text = text.replace(tocString, updatedToc);
-    updated = true;
-  }
 
   if (hasBookmarks() === true) {
     const lines = text.split(endOfLine);
@@ -354,6 +357,34 @@ async function updateOnSave() {
       config.bookmarksToLevel
     );
     text = updatedLines.join(endOfLine);
+    updated = true;
+  }
+
+  if (hasSectionNumbering() === true) {
+    const lines = text.split(endOfLine);
+    const updatedLines = document.addSectionNumbering(
+      lines,
+      config.numberingFromLevel,
+      config.numberingToLevel
+    );
+
+    text = updatedLines.join(endOfLine);
+    updated = true;
+  }
+
+  const tocString = toc.getText(editor);
+  if (tocString.length > 0) {
+    const updatedToc = toc.create(
+      text,
+      config.tableOfContentsFromLevel,
+      config.tableOfContentsToLevel,
+      config.slugifyStyle,
+      config.tableOfContentsLabel,
+      config.tableOfContentsListType,
+      util.getTab(editor),
+      endOfLine
+    );
+    text = text.replace(tocString, updatedToc);
     updated = true;
   }
 

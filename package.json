@@ -5,9 +5,9 @@
   "author": {
     "name": "Rob O'Leary"
   },
-  "description": "A funky bunch of methods for writing markdown more easily.",
+  "description": "Add dynamic content such as Table of Contents, Bookmarks, Section Numbers. Automatically update it when you save.",
   "icon": "img/icon/icon-500x500.png",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -103,6 +103,15 @@
           "default": "",
           "description": "Add a label to the top of the Table of Contents."
         },
+        "markyMarkdown.tableOfContents.listType": {
+          "type": "string",
+          "default": "unordered list",
+          "enum": [
+            "unordered list",
+            "ordered list"
+          ],
+          "description": "Choose the list type for the Table of Contents."
+        },
         "markyMarkdown.slugifyStyle": {
           "type": "string",
           "enum": [
@@ -121,14 +130,14 @@
     }
   },
   "scripts": {
-    "lint": "eslint src/.",
-    "lint:fix": "eslint --fix src/.",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
     "format": "npx prettier --write .",
     "test": "node ./test/runTest.js",
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch",
     "vscode:prepublish": "webpack --mode production",
-    "p": "vsce package"
+    "build": "vsce package ."
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",

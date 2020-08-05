@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2020-08-08
+
+### Added
+
+- Update on Save for Section Numbering.
+- Option to choose the list type for Table of Contents.
+
+### Changed
+
+- Gave default values to some parameters and removed any default setting in function bodies.
+- Improve blurb in README.md.
+
 ## [2.1.0] - 2020-08-03
 
 ### Added

@@ -7,9 +7,8 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/robole/vscode-marky-markdown?color=4b0082)
 ![Built with](https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet)
 
-A funky bunch of methods for writing markdown more easily. ✍😎
+Add dynamic content such as Table of Contents, Bookmarks, Section Numbers. Automatically update it when you save.
 
-![marky shaking his head](img/marky.gif)
 
 <!-- TOC -->
 **Table of Contents**
@@ -97,12 +96,13 @@ These settings can be applied to the User and the Workspace. The Workspace value
 | ----------------------------------------------- | ------- | -------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Marky Markdown › Bookmarks: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which bookmarks are managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
 | Marky Markdown › Bookmarks: Link Image Path     | String  |                      | ""      | Add an image to the heading bookmark link. If both text and an image are specified, the image will come first.                                                                                          |
-| Marky Markdown › Bookmarks: Link Text           | String  |                      | ∞       | Customize the text of the heading bookmark links.                                                                                                                                                       |
+| Marky Markdown › Bookmarks: Link Text           | String  |                      | "∞"       | Customize the text of the heading bookmark links.                                                                                                                                                       |
 | Marky Markdown › Section Numbering: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) for section numbers to be managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
-| Marky Markdown › Slugify Style                  | String  | ['github', 'gitlab'] | github  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
+| Marky Markdown › Slugify Style                  | String  | ["github", "gitlab"] | "github"  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
 | Marky Markdown › Table Of Contents: Label       | String  |                      | ""      | Add a label to the top of the Table of Contents.                                                                                                                                                        |
 | Marky Markdown › Table of Contents: Level Range | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which are included in the Table of Contents. For example, the range of '2..6' includes headings from level 2 to level 6. |
-| Marky Markdown › Update On Save                 | Boolean |                      | false   | Update the Bookmarks and Table of Contents automatically when the document is saved.                                                                                                                    |
+| Marky Markdown › Table of Contents: List Type                 | String  | ["unordered list", "ordered list"] | "unordered list"  | The type of list for arranging the Table of Contents                               |
+| Marky Markdown › Update On Save                 | Boolean |                      | false   | Update the Bookmarks, Table of Contents, and Section Numbers automatically when the document is saved.                                                                                                                    |
 
 ## Installation
 
@@ -116,7 +116,5 @@ None.
 
 ## Feature Wishlist
 
-1. Include section numbering in Update on Save.
-1. Include link text and image text path in regex to avoid false positives for bookmarks being added to document.
-1. Option to choose ordered list for TOC.
+1. Status bar stats: word count, table of contents
 1. Add support for other languages.

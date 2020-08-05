@@ -153,6 +153,18 @@ describe("Document", function () {
     });
   });
 
+  describe("hasSectionNumbering()", function () {
+    it("should return true if the docs within a range have bookmarks", function () {
+      const TEXT1 =
+        "# doc 1\r\n\r\npppp\r\n\r\n## [∞](#doc-2) doc 2\r\n\r\n### 3";
+      const TEXT2 =
+        "# Title\r\n\r\npppp\r\n\r\n## 1. [∞](#doc-2) Heading Level 2\r\n\r\n### 1.1 Heading level 3";
+      assert.equal(doc.hasSectionNumbering(TEXT1, 2, 6), false);
+      assert.equal(doc.hasSectionNumbering(TEXT2, 2, 6), true);
+      assert.equal(doc.hasSectionNumbering(TEXT2, 4, 6), false);
+    });
+  });
+
   describe("getHeadings()", function () {
     const TEXT1 =
       "# Heading 1\r\n\r\npppp\r\n\r\n## Heading 2\r\n\r\n### Heading 3";

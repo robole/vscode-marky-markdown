@@ -18,12 +18,7 @@ module.exports = {
  * @param {number} toLevel - Heading level.
  * @param {string} flags - The flags that you pass to a regex e.g. g for global. Optional.
  */
-function getGroupedRegex(fromLevel, toLevel, flags) {
-  let flagsToUse = "";
-  if (flags !== undefined) {
-    flagsToUse = flags;
-  }
-
+function getGroupedRegex(fromLevel, toLevel, flags = "") {
   return new RegExp(
     // eslint-disable-next-line prefer-template
     "^(\\s*" +
@@ -36,7 +31,7 @@ function getGroupedRegex(fromLevel, toLevel, flags) {
       "\\s+?)(\\[.*\\]\\(.*?\\)\\s*)*((\\d+\\.)+\\s)*(.*?)(\\s?" +
       MARKDOWN_CHAR +
       "{0,6}\\s*)$",
-    flagsToUse
+    flags
   );
 }
 
@@ -46,16 +41,8 @@ function getGroupedRegex(fromLevel, toLevel, flags) {
  * @param {number} toLevel - Heading level.
  * @param {string} flags - The flags that you pass to a regex e.g. g for global. Optional.
  */
-function getRegex(fromLevel, toLevel, flags) {
-  let flagsToUse = "";
-  if (flags !== undefined) {
-    flagsToUse = flags;
-  }
-
-  return new RegExp(
-    `^${MARKDOWN_CHAR}{${fromLevel},${toLevel}}\\s.*`,
-    flagsToUse
-  );
+function getRegex(fromLevel, toLevel, flags = "") {
+  return new RegExp(`^${MARKDOWN_CHAR}{${fromLevel},${toLevel}}\\s.*`, flags);
 }
 
 function getLevel(heading) {
