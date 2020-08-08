@@ -1,8 +1,3 @@
-module.exports = {
-  image,
-  link,
-};
-
 /**
  * Returns a markdown image based on the inputs
  * @param {string} alt - Alternative text
@@ -29,3 +24,8 @@ function link(text, path) {
 
   return null;
 }
+
+module.exports = {
+  image,
+  link,
+};

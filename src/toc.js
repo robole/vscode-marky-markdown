@@ -11,13 +11,6 @@ const TOC_START = `<!-- TOC -->`;
 const REGEX_TOC_END = /\s*<!--\s*\/TOC\s*-->/gi;
 const TOC_END = `<!-- /TOC -->`;
 
-module.exports = {
-  create,
-  getRange,
-  getText,
-  getCodeLens,
-};
-
 /**
  * Get the range of the Table of Contents (TOC). If the editor is not available, it will return undefined.
  * If there is no TOC, it will return an empty range (start === end) for the current cursor position.
@@ -197,3 +190,10 @@ function getCodeLens(editor) {
   });
   return lens;
 }
+
+module.exports = {
+  create,
+  getRange,
+  getText,
+  getCodeLens,
+};

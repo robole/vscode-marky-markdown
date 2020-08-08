@@ -7,7 +7,7 @@
   },
   "description": "Ever wanted to create a Table of Contents and not have to worry about updating it? Look no further!",
   "icon": "img/icon/icon-500x500.png",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -64,7 +64,7 @@
       },
       {
         "command": "marky-markdown.selectStatisticItem",
-        "title": "Marky Markdown: Select Stat to Show in Status Bar"
+        "title": "Marky Markdown: Select a Statistic for the Status Bar"
       }
     ],
     "configuration": {
@@ -125,10 +125,21 @@
           "default": "github",
           "description": "Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently."
         },
+        "markyMarkdown.statisticStatusBarItem": {
+          "type": "string",
+          "default": "Reading Time",
+          "enum": [
+            "Reading Time",
+            "Words",
+            "Lines",
+            "Characters"
+          ],
+          "description": "Choose the statistic item that is shown in the status bar."
+        },
         "markyMarkdown.updateOnSave": {
           "type": "boolean",
           "default": false,
-          "description": "Update the Bookmarks and Table of Contents automatically when the document is saved."
+          "description": "Update the Table of Contents, Section Numbers, and Bookmarks automatically when the document is saved."
         }
       }
     }

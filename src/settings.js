@@ -1,11 +1,6 @@
 // eslint-disable-next-line import/no-unresolved, node/no-missing-require
 const vscode = require("vscode");
 
-module.exports = {
-  getWorkspaceConfig,
-  getLevels,
-};
-
 /**
  * Get a config object with the properties related to this extension
  * @returns {object} Custom config object
@@ -40,14 +35,21 @@ function getWorkspaceConfig() {
   let sectionLevels = getLevels(sectionLevelRange);
   [config.numberingFromLevel, config.numberingToLevel] = sectionLevels;
 
-  config.updateOnSave = vscode.workspace
-    .getConfiguration("markyMarkdown")
-    .get("updateOnSave");
-  config.slugifyStyle = vscode.workspace
-    .getConfiguration("markyMarkdown")
-    .get("slugifyStyle");
+  const marky = vscode.workspace.getConfiguration("markyMarkdown");
+  config.statisticStatusBarItem = marky.get("statisticStatusBarItem");
+  config.updateOnSave = marky.get("updateOnSave");
+  config.slugifyStyle = marky.get("slugifyStyle");
 
   return config;
+}
+
+/**
+ *
+ * Set the statistic item selected for the status bar
+ */
+function setStatisticStatusBarItem(value) {
+  const marky = vscode.workspace.getConfiguration("markyMarkdown");
+  marky.update("statisticStatusBarItem", value);
 }
 
 /**
@@ -67,3 +69,9 @@ function getLevels(levelRange) {
 
   return levels;
 }
+
+module.exports = {
+  getWorkspaceConfig,
+  getLevels,
+  setStatisticStatusBarItem,
+};

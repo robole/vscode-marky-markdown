@@ -4,24 +4,6 @@ const doc = require("./document");
 const settings = require("./settings");
 const util = require("./util");
 const toc = require("./toc");
-const document = require("./document");
-
-module.exports = {
-  addBookmarks,
-  removeBookmarks,
-  hasBookmarks,
-  getHeadings,
-  addTableOfContents,
-  removeTableOfContents,
-  addSectionNumbering,
-  removeSectionNumbering,
-  getTableOfContentsCodeLens,
-  onWillSave,
-  getWordCount,
-  getCharacterCount,
-  getReadingTime,
-  getLineCount,
-};
 
 /**
  * Add bookmark links to the headings based on the range specified in the Configuration.
@@ -352,7 +334,7 @@ async function updateOnSave() {
 
   if (hasBookmarks() === true) {
     const lines = text.split(endOfLine);
-    const updatedLines = document.addBookmarks(
+    const updatedLines = doc.addBookmarks(
       lines,
       config.bookmarksLinkImagePath,
       config.bookmarksLinkText,
@@ -366,7 +348,7 @@ async function updateOnSave() {
 
   if (hasSectionNumbering() === true) {
     const lines = text.split(endOfLine);
-    const updatedLines = document.addSectionNumbering(
+    const updatedLines = doc.addSectionNumbering(
       lines,
       config.numberingFromLevel,
       config.numberingToLevel
@@ -450,8 +432,8 @@ function getCharacterCount() {
  * Get the reading time in minutes. It is based on a reading speed of 250 words per minute.
  */
 function getReadingTime() {
-  const words = getWordCount();
-  return Math.ceil(words / 250);
+  const editor = vscode.window.activeTextEditor;
+  return doc.getReadingTime(editor.document.getText());
 }
 
 /**
@@ -460,3 +442,20 @@ function getReadingTime() {
 function getLineCount() {
   return vscode.window.activeTextEditor.document.lineCount;
 }
+
+module.exports = {
+  addBookmarks,
+  removeBookmarks,
+  hasBookmarks,
+  getHeadings,
+  addTableOfContents,
+  removeTableOfContents,
+  addSectionNumbering,
+  removeSectionNumbering,
+  getTableOfContentsCodeLens,
+  onWillSave,
+  getWordCount,
+  getCharacterCount,
+  getReadingTime,
+  getLineCount,
+};

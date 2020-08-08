@@ -272,6 +272,22 @@ describe("Document", function () {
         "# Document title,## Section level 2 ##,### Section level 3, blah blah blah";
       assert.equal(doc.getWordCount(TEXT), 11);
     });
+    it("should return zero for an empty text", function () {
+      const TEXT = "";
+      assert.equal(doc.getWordCount(TEXT), 0);
+    });
+  });
+
+  describe("getReadingTime()", function () {
+    it("should get the number of minutes of reading time for the text", function () {
+      const TEXT = `Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iste fugiat error reiciendis accusamus laboriosam, aspernatur quaerat quo ipsa ab amet sequi quis temporibus vitae non iusto corporis! Ipsam, ad maxime.
+      Quia consequatur rerum fugiat dignissimos. Dolores debitis, enim nisi esse rerum necessitatibus harum facere quisquam consectetur molestiae nesciunt.`;
+      assert.equal(doc.getReadingTime(TEXT), 1);
+    });
+    it("should return zero for an empty text", function () {
+      const TEXT = "";
+      assert.equal(doc.getReadingTime(TEXT), 0);
+    });
   });
 
   describe("getCharacterCount()", function () {
