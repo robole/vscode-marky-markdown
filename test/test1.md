@@ -1,6 +1,6 @@
 # Test Header 1
 
-Blah
+Blah. blah.
 
 <!-- TOC -->
 - [1. Test Header 2](#1-test-header-2)

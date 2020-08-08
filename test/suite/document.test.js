@@ -265,4 +265,20 @@ describe("Document", function () {
       );
     });
   });
+
+  describe("getWordCount()", function () {
+    it("should get the number of words of the text", function () {
+      const TEXT =
+        "# Document title,## Section level 2 ##,### Section level 3, blah blah blah";
+      assert.equal(doc.getWordCount(TEXT), 11);
+    });
+  });
+
+  describe("getCharacterCount()", function () {
+    it("should get the number of characters of the text", function () {
+      const TEXT =
+        "# Document title,## Section level 2 ##,### Section level 3, blah blah blah";
+      assert.equal(doc.getCharacterCount(TEXT), 75);
+    });
+  });
 });

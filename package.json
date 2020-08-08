@@ -5,9 +5,9 @@
   "author": {
     "name": "Rob O'Leary"
   },
-  "description": "Add dynamic content such as Table of Contents, Bookmarks, Section Numbers. Automatically update it when you save.",
+  "description": "Ever wanted to create a Table of Contents and not have to worry about updating it? Look no further!",
   "icon": "img/icon/icon-500x500.png",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -61,6 +61,10 @@
       {
         "command": "marky-markdown.removeSectionNumbering",
         "title": "Marky Markdown: Remove Section Numbering"
+      },
+      {
+        "command": "marky-markdown.selectStatisticItem",
+        "title": "Marky Markdown: Select Stat to Show in Status Bar"
       }
     ],
     "configuration": {

@@ -1,41 +1,59 @@
 // eslint-disable-next-line import/no-unresolved, node/no-missing-require
 const vscode = require("vscode");
-const editor = require("./activeeditor");
+const activeDoc = require("./active-document");
+const statistics = require("./statistics");
 
 function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "marky-markdown.addBookmarks",
-      editor.addBookmarks
+      activeDoc.addBookmarks
     ),
     vscode.commands.registerCommand(
       "marky-markdown.removeBookmarks",
-      editor.removeBookmarks
+      activeDoc.removeBookmarks
     ),
     vscode.commands.registerCommand(
       "marky-markdown.addTableOfContents",
-      editor.addTableOfContents
+      activeDoc.addTableOfContents
     ),
     vscode.commands.registerCommand(
       "marky-markdown.removeTableOfContents",
-      editor.removeTableOfContents
+      activeDoc.removeTableOfContents
     ),
     vscode.commands.registerCommand(
       "marky-markdown.addSectionNumbering",
-      editor.addSectionNumbering
+      activeDoc.addSectionNumbering
     ),
     vscode.commands.registerCommand(
       "marky-markdown.removeSectionNumbering",
-      editor.removeSectionNumbering
+      activeDoc.removeSectionNumbering
     ),
-    vscode.workspace.onWillSaveTextDocument(editor.onWillSave),
+    vscode.commands.registerCommand(
+      "marky-markdown.selectStatisticItem",
+      statistics.selectItem
+    ),
     vscode.languages.registerCodeLensProvider("markdown", {
       provideCodeLenses() {
         // expects iterator of codelenses, so we comply!
         const lenses = [];
-        lenses.push(editor.getTableOfContentsCodeLens());
+        lenses.push(activeDoc.getTableOfContentsCodeLens());
         return lenses;
       },
+    }),
+    vscode.workspace.onWillSaveTextDocument(activeDoc.onWillSave),
+    vscode.workspace.onDidChangeTextDocument(function (e) {
+      if (e.document.languageId === "markdown") {
+        statistics.update();
+      }
+    }),
+    vscode.window.onDidChangeActiveTextEditor(function (e) {
+      if (e.document.languageId === "markdown") {
+        statistics.update();
+        statistics.show();
+      } else {
+        statistics.hide();
+      }
     })
   );
 }

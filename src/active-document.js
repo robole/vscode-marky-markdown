@@ -17,6 +17,10 @@ module.exports = {
   removeSectionNumbering,
   getTableOfContentsCodeLens,
   onWillSave,
+  getWordCount,
+  getCharacterCount,
+  getReadingTime,
+  getLineCount,
 };
 
 /**
@@ -424,4 +428,35 @@ function getLines() {
   }
 
   return lines;
+}
+
+/**
+ * Get the number of words for the document.
+ */
+function getWordCount() {
+  const editor = vscode.window.activeTextEditor;
+  return doc.getWordCount(editor.document.getText());
+}
+
+/**
+ * Get the number of characters including new line characters.
+ */
+function getCharacterCount() {
+  const editor = vscode.window.activeTextEditor;
+  return doc.getCharacterCount(editor.document.getText());
+}
+
+/**
+ * Get the reading time in minutes. It is based on a reading speed of 250 words per minute.
+ */
+function getReadingTime() {
+  const words = getWordCount();
+  return Math.ceil(words / 250);
+}
+
+/**
+ * Get the number of lines.
+ */
+function getLineCount() {
+  return vscode.window.activeTextEditor.document.lineCount;
 }

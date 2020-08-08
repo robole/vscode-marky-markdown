@@ -11,6 +11,8 @@ module.exports = {
   hasSectionNumbering,
   getHeadings,
   getGroupedHeadings,
+  getWordCount,
+  getCharacterCount,
 };
 
 /**
@@ -302,4 +304,22 @@ function getGroupedHeadings(text, fromLevel, toLevel = 6) {
   // @ts-ignore
   const matches = text.matchAll(regex);
   return [...matches];
+}
+
+/**
+ * Get the number of words.
+ *
+ * @param {string} text Text for document.
+ */
+function getWordCount(text) {
+  return text.match(/\w+/g).length;
+}
+
+/**
+ * Get the number of characters including new line characters.
+ *
+ * @param {string} text Text for document.
+ */
+function getCharacterCount(text) {
+  return text.match(/[.\r\n]*/gm).length;
 }

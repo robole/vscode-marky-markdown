@@ -7,16 +7,19 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/robole/vscode-marky-markdown?color=4b0082)
 ![Built with](https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet)
 
-Add dynamic content such as Table of Contents, Bookmarks, Section Numbers. Automatically update it when you save.
+This extension exists to make your life easier, to remove the irritating manual interventions you may need to make when writing a markdown document. 🛠😰
 
+Dynamic content that you may want to add to your document such as a Table of Contents, Bookmark Links, and Section Numbering can break and go stale as you edit. You can use this trusty set of commands to ensure that doesn't happen, you can go further by enabling "update on save" and forget all about it! 🌞
+
+More features are being added to get closer to a word processor experience (I know the term is a bit jaded), which assists you in writing quality content without getting in your way. 🙂
 
 <!-- TOC -->
-**Table of Contents**
 - [Commands](#commands)
 - [Features](#features)
 	- [(1) Manage a Table of Contents (TOC)](#1-manage-a-table-of-contents-toc)
 	- [(2) Manage Heading Bookmarks](#2-manage-heading-bookmarks)
 	- [(3) Manage Section Numbering](#3-manage-section-numbering)
+	- [(4) Document Stats](#4-document-stats)
 - [Extension Settings](#extension-settings)
 - [Installation](#installation)
 - [Known Issues](#known-issues)
@@ -33,6 +36,7 @@ The following commands can be run from the Command Palette (`Ctrl+Shift+P`):
 1. `Marky Markdown: Remove Heading Bookmarks`
 1. `Marky Markdown: Add/Update Section Numbering`
 1. `Marky Markdown: Remove Section Numbering`
+1. `Marky Markdown: Select Stat to Show in Status Bar`
 
 ## Features
 
@@ -88,6 +92,12 @@ It does the following:
 
 The command `Marky Markdown: Remove Section Numbering` will remove the section numbers.
 
+### (4) Document Stats
+
+A stat for the document is added to the status bar. By default, it is the word count. You can choose an alternative by clicking the status bar item, or by running the command `Marky Markdown: Select Stat to Show in Status Bar`.
+
+![select stat](img/screenshots/stat-select.gif)
+
 ## Extension Settings
 
 These settings can be applied to the User and the Workspace. The Workspace values take precedence over the User values.
@@ -98,10 +108,10 @@ These settings can be applied to the User and the Workspace. The Workspace value
 | Marky Markdown › Bookmarks: Link Image Path     | String  |                      | ""      | Add an image to the heading bookmark link. If both text and an image are specified, the image will come first.                                                                                          |
 | Marky Markdown › Bookmarks: Link Text           | String  |                      | "∞"       | Customize the text of the heading bookmark links.                                                                                                                                                       |
 | Marky Markdown › Section Numbering: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) for section numbers to be managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
-| Marky Markdown › Slugify Style                  | String  | ["github", "gitlab"] | "github"  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
+| Marky Markdown › Slugify Style                  | String  | "github", "gitlab" | "github"  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
 | Marky Markdown › Table Of Contents: Label       | String  |                      | ""      | Add a label to the top of the Table of Contents.                                                                                                                                                        |
 | Marky Markdown › Table of Contents: Level Range | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which are included in the Table of Contents. For example, the range of '2..6' includes headings from level 2 to level 6. |
-| Marky Markdown › Table of Contents: List Type                 | String  | ["unordered list", "ordered list"] | "unordered list"  | The type of list for arranging the Table of Contents                               |
+| Marky Markdown › Table of Contents: List Type                 | String  | "unordered list", "ordered list" | "unordered list"  | The type of list for arranging the Table of Contents                               |
 | Marky Markdown › Update On Save                 | Boolean |                      | false   | Update the Bookmarks, Table of Contents, and Section Numbers automatically when the document is saved.                                                                                                                    |
 
 ## Installation
@@ -116,5 +126,6 @@ None.
 
 ## Feature Wishlist
 
-1. Status bar stats: word count, table of contents
+1. Status bar stats: show when new file created?
+1. Add good banner image.
 1. Add support for other languages.

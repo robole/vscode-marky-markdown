@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2020-08-09
+
+### Added
+
+- Added stat in the status bar.
+- The command `Marky Markdown: Select Stat to Show in Status Bar`.
+- Added screenshot for selecting stats.
+
+### Changed
+
+- Improved blurb in README.md (I can do better 💪)!
+- Section for stats in README.md.
+
 ## [2.2.0] - 2020-08-08
 
 ### Added
@@ -15,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Gave default values to some parameters and removed any default setting in function bodies.
-- Improve blurb in README.md.
+- Improved blurb in README.md.
 
 ## [2.1.0] - 2020-08-03
 
@@ -30,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed the basis of a tab to the following settings for the active editor: `Editor: Insert Spaces`, and `Editor: Detect Indentation`, and `Editor: Tab Size`.
 - Refactored code based on new ESLint config.
-- Updated *.vscodeignore* to ignore all images except the icon and ignore README.md, which reduced the size of the extension from 750KB to 65KB.
+- Updated _.vscodeignore_ to ignore all images except the icon and ignore README.md, which reduced the size of the extension from 750KB to 65KB.
 
 ## [2.0.1] - 2020-07-29
 
