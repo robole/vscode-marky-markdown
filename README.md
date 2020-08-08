@@ -36,7 +36,6 @@ The following commands can be run from the Command Palette (`Ctrl+Shift+P`):
 1. `Marky Markdown: Remove Heading Bookmarks`
 1. `Marky Markdown: Add/Update Section Numbering`
 1. `Marky Markdown: Remove Section Numbering`
-1. `Marky Markdown: Select Stat to Show in Status Bar`
 
 ## Features
 
@@ -94,7 +93,7 @@ The command `Marky Markdown: Remove Section Numbering` will remove the section n
 
 ### (4) Document Stats
 
-A stat for the document is added to the status bar. By default, it is the word count. You can choose an alternative by clicking the status bar item, or by running the command `Marky Markdown: Select Stat to Show in Status Bar`.
+A stat for the document is added to the status bar. By default, it is the Reading Time. You can choose an alternative by clicking the status bar item, and selecting from the quickpick menu.
 
 ![select stat](img/screenshots/stat-select.gif)
 
@@ -109,6 +108,7 @@ These settings can be applied to the User and the Workspace. The Workspace value
 | Marky Markdown › Bookmarks: Link Text           | String  |                      | "∞"       | Customize the text of the heading bookmark links.                                                                                                                                                       |
 | Marky Markdown › Section Numbering: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) for section numbers to be managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
 | Marky Markdown › Slugify Style                  | String  | "github", "gitlab" | "github"  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
+| Marky Markdown › Statistic Status Bar Item         | String  | "Reading Time", "Words", "Lines", "Characters" | "Reading Time"  | Select the statistic you would like to be shown in the status bar item.                               |
 | Marky Markdown › Table Of Contents: Label       | String  |                      | ""      | Add a label to the top of the Table of Contents.                                                                                                                                                        |
 | Marky Markdown › Table of Contents: Level Range | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which are included in the Table of Contents. For example, the range of '2..6' includes headings from level 2 to level 6. |
 | Marky Markdown › Table of Contents: List Type                 | String  | "unordered list", "ordered list" | "unordered list"  | The type of list for arranging the Table of Contents                               |
@@ -124,8 +124,9 @@ These settings can be applied to the User and the Workspace. The Workspace value
 
 None.
 
-## Feature Wishlist
+## Coming Soon
 
-1. Status bar stats: show when new file created?
-1. Add good banner image.
-1. Add support for other languages.
+1. A good banner image.
+1. Heading exclusion from TOC.
+1. File specific settings?
+1. Support for other languages.

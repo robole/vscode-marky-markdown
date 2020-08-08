@@ -5,12 +5,6 @@ let settings = require("./settings");
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
 const PUNCTUATION_REGEXP = /[^\p{L}\p{M}\p{N}\p{Pc}\- ]/gu;
 
-module.exports = {
-  slugify,
-  getEndOfLine,
-  getTab,
-};
-
 /**
  * Get the End Of Line sequence (LR or CRLF) for the editor provided.
  * @param {import("vscode").TextEditor} editor
@@ -100,3 +94,9 @@ function getTab(editor) {
 
   return tab;
 }
+
+module.exports = {
+  slugify,
+  getEndOfLine,
+  getTab,
+};

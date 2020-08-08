@@ -1,12 +1,5 @@
 const MARKDOWN_CHAR = "#";
 
-module.exports = {
-  getGroupedRegex,
-  getRegex,
-  getLevel,
-  stripMarkdown,
-};
-
 /**
  * Regex to find ATX heading styles based on a range of heading levels. The content is grouped with the following indexes:
  *    0 = entire match, 1 = opening markdown characters. 2 = link including image,
@@ -71,3 +64,10 @@ function stripMarkdown(heading) {
 
   return text;
 }
+
+module.exports = {
+  getGroupedRegex,
+  getRegex,
+  getLevel,
+  stripMarkdown,
+};

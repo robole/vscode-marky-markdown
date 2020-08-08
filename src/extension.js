@@ -4,6 +4,8 @@ const activeDoc = require("./active-document");
 const statistics = require("./statistics");
 
 function activate(context) {
+  statistics.show();
+
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "marky-markdown.addBookmarks",
@@ -29,10 +31,6 @@ function activate(context) {
       "marky-markdown.removeSectionNumbering",
       activeDoc.removeSectionNumbering
     ),
-    vscode.commands.registerCommand(
-      "marky-markdown.selectStatisticItem",
-      statistics.selectItem
-    ),
     vscode.languages.registerCodeLensProvider("markdown", {
       provideCodeLenses() {
         // expects iterator of codelenses, so we comply!
@@ -49,7 +47,6 @@ function activate(context) {
     }),
     vscode.window.onDidChangeActiveTextEditor(function (e) {
       if (e.document.languageId === "markdown") {
-        statistics.update();
         statistics.show();
       } else {
         statistics.hide();

@@ -2,19 +2,6 @@ const heading = require("./heading");
 const util = require("./util");
 const markdown = require("./markdown");
 
-module.exports = {
-  addBookmarks,
-  removeBookmarks,
-  hasBookmarks,
-  addSectionNumbering,
-  removeSectionNumbering,
-  hasSectionNumbering,
-  getHeadings,
-  getGroupedHeadings,
-  getWordCount,
-  getCharacterCount,
-};
-
 /**
  * Scans the contents of the text to check if it has bookmarks based on the provided range of heading levels.
  * @param {string} text - Text to search
@@ -312,7 +299,28 @@ function getGroupedHeadings(text, fromLevel, toLevel = 6) {
  * @param {string} text Text for document.
  */
 function getWordCount(text) {
-  return text.match(/\w+/g).length;
+  let matches = text.match(/\w+/g);
+
+  if (matches === null) {
+    return 0;
+  }
+
+  return matches.length;
+}
+
+/**
+ * Get the reading time in minutes. It is based on a reading speed of 250 words per minute.
+ *
+ *  @param {string} text Text for document.
+ */
+function getReadingTime(text) {
+  const words = getWordCount(text);
+
+  if (words === 0) {
+    return 0;
+  }
+
+  return Math.ceil(words / 250);
 }
 
 /**
@@ -323,3 +331,17 @@ function getWordCount(text) {
 function getCharacterCount(text) {
   return text.match(/[.\r\n]*/gm).length;
 }
+
+module.exports = {
+  addBookmarks,
+  removeBookmarks,
+  hasBookmarks,
+  addSectionNumbering,
+  removeSectionNumbering,
+  hasSectionNumbering,
+  getHeadings,
+  getGroupedHeadings,
+  getWordCount,
+  getCharacterCount,
+  getReadingTime,
+};

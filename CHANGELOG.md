@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2020-08-11
+
+### Added
+
+- Added `getReadingTime()` to `document.js` and related test in `document.test.js`.
+- Added `marky-markdown.selectStatisticItem` to `package.json` to choose stat to display.
+
+### Changed
+
+- Description for `Update on Save` to include section numbers.
+- Changed `getWordCount()` to return zero for empty string.
+- Changed `statistics.js` to save selection of the stat item to the workspace configuration.
+- Moved module exports to the end of all files in *src/*.
+
+### Removed
+
+- Removed the command `Marky Markdown: Select Stat to Show in Status Bar`. Quickpick selection is preferable.
+
 ## [2.3.0] - 2020-08-09
 
 ### Added
