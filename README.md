@@ -2,7 +2,7 @@
 
 ![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=made%20for&message=VS%20Code&color=0000ff)
 ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/robole.marky-markdown?logo=visual-studio-code&color=ffa500)
-![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=65KB&color=008000)
+![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=68KB&color=008000)
 ![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/robole.marky-markdown?logo=visual-studio-code&color=yellow)
 ![GitHub last commit](https://img.shields.io/github/last-commit/robole/vscode-marky-markdown?color=4b0082)
 ![Built with](https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet)

@@ -47,9 +47,9 @@ function getWorkspaceConfig() {
  *
  * Set the statistic item selected for the status bar
  */
-function setStatisticStatusBarItem(value) {
+async function setStatisticStatusBarItem(value) {
   const marky = vscode.workspace.getConfiguration("markyMarkdown");
-  marky.update("statisticStatusBarItem", value);
+  return marky.update("statisticStatusBarItem", value);
 }
 
 /**

@@ -76,8 +76,9 @@ function selectItem() {
   quickPick.then(function (fufilled) {
     if (fufilled) {
       selection = fufilled.selection;
-      save();
-      update();
+      save().then(() => {
+        update();
+      });
     }
   });
 }
@@ -86,9 +87,9 @@ function selectItem() {
  * Save the current selection to the workspace configuration.
  *
  */
-function save() {
+async function save() {
   let settingValue = quickPickItem[selection].label.split(":")[0];
-  settings.setStatisticStatusBarItem(settingValue);
+  return settings.setStatisticStatusBarItem(settingValue);
 }
 
 /**

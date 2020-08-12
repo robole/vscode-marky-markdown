@@ -5,9 +5,9 @@
   "author": {
     "name": "Rob O'Leary"
   },
-  "description": "Ever wanted to create a Table of Contents and not have to worry about updating it? Look no further!",
+  "description": "Want to create a Table of Contents and not have to worry about updating it? Look no further!",
   "icon": "img/icon/icon-500x500.png",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "engines": {
     "vscode": "^1.46.0"
   },
