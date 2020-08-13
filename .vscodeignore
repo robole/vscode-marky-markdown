@@ -9,5 +9,5 @@ test
 src
 webpack.config.js
 img/**
-!img/icon/icon-500x500.png
+!img/icon/marky-icon.png
 readme.md

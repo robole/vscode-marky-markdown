@@ -6,8 +6,8 @@
     "name": "Rob O'Leary"
   },
   "description": "Want to create a Table of Contents and not have to worry about updating it? Look no further!",
-  "icon": "img/icon/icon-500x500.png",
-  "version": "2.4.1",
+  "icon": "img/icon/marky-icon.png",
+  "version": "2.5.0",
   "engines": {
     "vscode": "^1.46.0"
   },
