@@ -2,18 +2,25 @@
 
 ![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=made%20for&message=VS%20Code&color=0000ff)
 ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/robole.marky-markdown?logo=visual-studio-code&color=ffa500)
-![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=68KB&color=008000)
+![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=25KB&color=008000)
 ![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/robole.marky-markdown?logo=visual-studio-code&color=yellow)
 ![GitHub last commit](https://img.shields.io/github/last-commit/robole/vscode-marky-markdown?color=4b0082)
 ![Built with](https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet)
 
-This extension exists to make your life easier, to remove the irritating manual interventions you may need to make when writing a markdown document. 🛠😰
+This extension exists to make writing markdown a pleasure, to remove friction and any irritating manual interventions you may need to make for dynamic content. 😰
 
-Dynamic content that you may want to add to your document such as a Table of Contents, Bookmark Links, and Section Numbering can break and go stale as you edit. You can use this trusty set of commands to ensure that doesn't happen, you can go further by enabling "update on save" and forget all about it! 🌞
+For example, a Table of Contents can break and go stale as you edit. Just set "update on save" and never have to worry about this again! 🌞
 
-More features are being added to get closer to a word processor experience (I know the term is a bit jaded), which assists you in writing quality content without getting in your way. 🙂
+Reasons to choose this extension over others:
+1. Small size with zero bloat: Many extensions include things that are unnecessary in the package and do not optimize the resources. Expect this extension to load faster. ⚡
+1. Loaded only when necessary: It is loaded only when you have markdown documents open. Some extensions are loaded for every project with a README, lurking in memory never to be used! 👻
+1. Tested well. This extension has a test suite, it is alarming how many extensions don't! ✔
+1. I use this extension and actively maintain it. 🙋‍♂️
+
+More features are being added to get closer to a word processor experience (I know the term is a bit jaded), to assist you in writing quality content without getting in your way. 🙂
 
 <!-- TOC -->
+**Table of Contents**
 - [Commands](#commands)
 - [Features](#features)
 	- [(1) Manage a Table of Contents (TOC)](#1-manage-a-table-of-contents-toc)
@@ -23,7 +30,7 @@ More features are being added to get closer to a word processor experience (I kn
 - [Extension Settings](#extension-settings)
 - [Installation](#installation)
 - [Known Issues](#known-issues)
-- [Feature Wishlist](#feature-wishlist)
+- [Coming Soon](#coming-soon)
 <!-- /TOC -->
 
 ## Commands
@@ -36,6 +43,7 @@ The following commands can be run from the Command Palette (`Ctrl+Shift+P`):
 1. `Marky Markdown: Remove Heading Bookmarks`
 1. `Marky Markdown: Add/Update Section Numbering`
 1. `Marky Markdown: Remove Section Numbering`
+1. `Marky Markdown: Select a Statistic for the Status Bar`
 
 ## Features
 
@@ -130,3 +138,4 @@ None.
 1. Heading exclusion from TOC.
 1. File specific settings?
 1. Support for other languages.
+

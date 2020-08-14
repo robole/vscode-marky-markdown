@@ -5,9 +5,9 @@
   "author": {
     "name": "Rob O'Leary"
   },
-  "description": "Want to create a Table of Contents and not have to worry about updating it? Look no further!",
+  "description": "Table of Contents. Bookmarks. Section Numbering. Auto-update them on save.",
   "icon": "img/icon/marky-icon.png",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -15,7 +15,7 @@
     "Other"
   ],
   "galleryBanner": {
-    "color": "#fcc2f8",
+    "color": "#00ffff",
     "theme": "light"
   },
   "keywords": [
