@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2020-08-20
+
+### Changed
+
+- Change extension to be an extension pack for 2 extensions (Marky Dynamic and Marky Stats), which have the same features. So, now users can pick or choose features with separate installations if they prefer.
+
+### Removed
+
+- Remove redundant code.
+
 ## [2.5.1] - 2020-08-14
 
 ### Changed
