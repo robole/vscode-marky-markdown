@@ -5,11 +5,11 @@
   "author": {
     "name": "Rob O'Leary"
   },
-  "description": "Table of Contents. Bookmarks. Section Numbering. Auto-update them on save. Document Stats.",
+  "description": "Markdown editing. Redefined.",
   "icon": "img/logo.png",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "engines": {
-    "vscode": "^1.46.0"
+    "vscode": "^1.0.0"
   },
   "categories": [
     "Extension Packs"
@@ -31,7 +31,10 @@
     "wordcount",
     "reading stats",
     "reading statistics",
-    "word counter"
+    "word counter",
+    "markdown snippets",
+    "extended markdown",
+    "github markdown"
   ],
   "bugs": {
     "url": "https://github.com/robole/vscode-marky-markdown/issues"
@@ -43,7 +46,9 @@
   "license": "MIT",
   "extensionPack": [
     "robole.marky-dynamic",
-    "robole.marky-stats"
+    "robole.marky-stats",
+    "robole.marky-edit",
+    "robole.markdown-snippets"
   ],
   "scripts": {
     "build": "vsce package ."
