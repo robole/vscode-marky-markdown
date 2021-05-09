@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2021-05-09
+
+### Changed
+
+- Update README.md format
+- Added github action to publish to marketplaces.
+
 ## [2.7.0] - 2020-09-09
 
 ### Added

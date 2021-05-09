@@ -1,43 +1,40 @@
-# Marky Markdown
+<h1 align="center">
+  <br>
+    <img align="center" src="img/logo.png" width="200">
+  <br>
+	<br>
+  Marky Markdown
+  <br>
+  <br>
+</h1>
+<h4 align="center">Markdown editing. Redefined.</h4>
 
-![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=made%20for&message=VS%20Code&color=0000ff)
-![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/robole.marky-markdown?logo=visual-studio-code&color=ffa500)
-![Extension file size in bytes](https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=20KB&color=008000)
-![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/robole.marky-markdown?logo=visual-studio-code&color=yellow)
-![Built with](https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet)
+<p align="center">
+<img src="https://img.shields.io/static/v1?logo=visual-studio-code&label=made%20for&message=VS%20Code&color=0000ff" alt="Made for VSCode">
+<img src="https://img.shields.io/visual-studio-marketplace/v/robole.marky-markdown?logo=visual-studio-code&color=ffa500" alt="Visual Studio Marketplace Version">
+<img src="https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=12KB&color=008000"
+alt="Extension file size in bytes">
+<img src="https://img.shields.io/visual-studio-marketplace/r/robole.marky-markdown?logo=visual-studio-code&color=yellow" alt="Visual Studio Marketplace Rating">
+<img src="https://img.shields.io/visual-studio-marketplace/d/robole.marky-markdown?logo=visual-studio-code&color=blue" alt="downloads"/>
+<img src="https://img.shields.io/visual-studio-marketplace/i/robole.marky-markdown?logo=visual-studio-code&color=blue" alt="installs"/>
+<img src="https://img.shields.io/static/v1?label=built%20with&message=good%20vibrations%20%26%20javascript&color=violet" alt="Built with carrot juice and javascript"/>
+<a href="https://ko-fi.com/roboleary"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee" alt="Buy me a coffee"></a>
+</p>
 
-![feature banner](img/banner1280x640.png)
+This is an extension pack for a collection of related markdown extensions I wrote. 
 
-This extension gives you **rich editing powers** for markdown documents, and enables you to **automate** the update of dynamic content.
-
-Reasons to choose this extension:
-1. **Modular design**. This is an Extension Pack. Related features are divided into separate extensions. Don't want all of the features? Then, only install the specific extensions you want! 📦📦📦
-1. **Small size with zero bloat**: Many extensions include unnecessary files in the extension and do not optimize the resources. Expect this extension to load fast. ⚡
-1. **Loaded only when necessary**: It is loaded only when you have markdown documents open. Some extensions are loaded for every project with a README, lurking in memory never to be used! 👻
-1. **Tested well**. The extensions have test suites, it is alarming how many extensions have zero tests! ✔
-1. **Actively Maintained**. I use this. 🙋‍♂️🙂
-
-<!-- TOC -->
-**Table of Contents**
-- [Extensions](#extensions)
-- [Commands](#commands)
-- [Features Overview](#features-overview)
-	- [1) Toggle-style editing](#1-toggle-style-editing)
-	- [2) Manage a Table of Contents (TOC)](#2-manage-a-table-of-contents-toc)
-	- [3) Manage Heading Bookmarks](#3-manage-heading-bookmarks)
-	- [4) Manage Section Numbering](#4-manage-section-numbering)
-	- [5) Markdown Snippets](#5-markdown-snippets)
-	- [6) Document Stats](#6-document-stats)
-- [Extension Settings](#extension-settings)
-- [Installation](#installation)
-<!-- /TOC -->
+The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features you don't use, or don't want by disabling an extension. You can go a step further and choose to only install the extensions you use.
 
 ## Extensions
 
 1. [Marky Edit](https://marketplace.visualstudio.com/items?itemName=robole.marky-edit): Toggle-style editing.
-1. [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic): Automate dynamic content such as Table of Contents and Section Numbering.
+1. [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic): Automate updating dynamic content such as Table of Contents.
 1. [Markdown Snippets](https://marketplace.visualstudio.com/items?itemName=robole.markdown-snippets): Snippets for extended markdown syntax.
-1. [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-stats): Add a stat status bar item.
+1. [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown): Add stats to the status bar.
+
+## Activation
+
+These extensions are only loaded when a markdown file is open. To be more specific, the [activation event](https://code.visualstudio.com/api/references/activation-events) is `onLanguage: markdown`.
 
 ## Commands
 
@@ -65,13 +62,15 @@ The following commands can be run from the Command Palette (`Ctrl+Shift+P`):
 1. `Marky Dynamic: Remove Heading Bookmarks`
 1. `Marky Dynamic: Add/Update Section Numbering`
 1. `Marky Dynamic: Remove Section Numbering`
-1. `Marky Stats: Select a Statistic for the Status Bar`
+1. `Marky Stats: Select Stat`
 
-## Features Overview
+See individual extensions for up-to-date list.
+
+## Major Features Overview
 
 ### 1) Toggle-style editing
 
-![toggle editing](img/screenshots/toggle-editing.gif)
+![toggle editing](img/screenshots/toggleStrong.gif)
 
 For more information, see [Marky Edit](https://marketplace.visualstudio.com/items?itemName=robole.marky-edit).
 
@@ -85,19 +84,7 @@ The command `Marky Dynamic: Remove the Table of Contents (TOC)` will remove the 
 
 For more information, see [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic).
 
-### 3) Manage Heading Bookmarks
-
-The command `Marky Dynamic: Add/Update Heading Bookmarks` will add bookmarks to the headings in the **active markdown document**.
-
-![add bookmark link to headings](img/screenshots/add-heading-link.gif)
-
-By default, it will add a link with the text '**∞**', this is the infinity character, which looks like a link! In the Settings, you can customise this text or specify an image.
-
-The command `Marky Dynamic: Remove Heading Bookmarks` will remove the bookmark links.
-
-For more information, see [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic).
-
-### 4) Manage Section Numbering
+### 3) Manage Section Numbering
 
 The command `Marky Dynamic: Add/Update Section Numbering` will add section numbers to the headings in the active markdown document.
 
@@ -105,15 +92,15 @@ The command `Marky Dynamic: Remove Section Numbering` will remove the section nu
 
 For more information, see [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic).
 
-### 5) Markdown Snippets
+### 4) Markdown Snippets
 
 ![table snippet](img/screenshots/table.gif)
 
-I recommend installing the [Snippets Ranger](https://marketplace.visualstudio.com/items?itemName=robole.snippets-ranger) extension. This gives you an easy up-to-date view of all of the snippets available.
+I recommend installing the [Snippets Ranger](https://marketplace.visualstudio.com/items?itemName=robole.snippets-ranger) extension to give you an easy to view and edit of all of the snippets available.
 
 For more information, see [Markdown Snippets](https://marketplace.visualstudio.com/items?itemName=robole.markdown-snippets).
 
-### 6) Document Stats
+### 5) Document Stats
 
 A stat for the document is added to the status bar. By default, it is the *Reading Time*.
 
@@ -121,27 +108,20 @@ A stat for the document is added to the status bar. By default, it is the *Readi
 
 You can choose an alternative stat by clicking the status bar item, and selecting from the quickpick menu.
 
-For more information, see [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-stats).
+For more information, see [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown).
 
 ## Extension Settings
 
-These settings can be applied to the User and the Workspace. The Workspace values take precedence over the User values.
-
-| Name                                            | Type    | Enum Values          | Default | Description                                                                                                                                                                                             |
-| ----------------------------------------------- | ------- | -------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Marky Markdown › Bookmarks: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which bookmarks are managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
-| Marky Markdown › Bookmarks: Link Image Path     | String  |                      | ""      | Add an image to the heading bookmark link. If both text and an image are specified, the image will come first.                                                                                          |
-| Marky Markdown › Bookmarks: Link Text           | String  |                      | "∞"       | Customize the text of the heading bookmark links.                                                                                                                                                       |
-| Marky Markdown › Section Numbering: Level Range         | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) for section numbers to be managed. For example, the range of '2..6' includes headings from level 2 to level 6.                 |
-| Marky Markdown › Slugify Style                  | String  | "github", "gitlab" | "github"  | Creates a formatted version of the heading text that can be used as an ID, this is used as a fragment URL in links. Vendors produce slugs that are formatted differently.                               |
-| Marky Markdown: Statistic Status Bar Item | String | "Reading Time", "Words", "Lines", "Characters" | "Reading Time" | Choose the statistic item that is shown in the status bar. |
-| Marky Markdown › Table Of Contents: Label       | String  |                      | ""      | Add a label to the top of the Table of Contents.                                                                                                                                                        |
-| Marky Markdown › Table of Contents: Level Range | String  |                      | "2..6"  | Select the range of heading levels (from most important to least important) to which are included in the Table of Contents. For example, the range of '2..6' includes headings from level 2 to level 6. |
-| Marky Markdown › Table of Contents: List Type                 | String  | "unordered list", "ordered list" | "unordered list"  | The type of list for arranging the Table of Contents                               |
-| Marky Markdown › Update On Save                 | Boolean |                      | false   | Update the Bookmarks, Table of Contents, and Section Numbers automatically when the document is saved.                                                                                                                    |
+You will find options for these extensions by searching for "marky".
 
 ## Installation
 
+1. The extension is listed in the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown) and [Open VSX Marketplace](https://open-vsx.org/extension/robole/marky-stats) where you can download or install it directly.
 1. Inside VS Code: Type `Ctrl+P`, write `ext install robole.marky-markdown` in the text field, and hit `Enter`.
 1. From the Command-line: Run the command `code --install-extension robole.marky-markdown`.
-1. From the [VS Marketplace](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown): Click the _Install_ button.
+
+## Show gratitude
+
+If you are happy with the extension, please star the repo, and leave a review to help others find it. 🌟
+
+You can [buy me a coffee](https://ko-fi.com/roboleary) if you would like to support me in my quest to make more great open-source software. ☕🙏
