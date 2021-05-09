@@ -12,7 +12,7 @@
 <p align="center">
 <img src="https://img.shields.io/static/v1?logo=visual-studio-code&label=made%20for&message=VS%20Code&color=0000ff" alt="Made for VSCode">
 <img src="https://img.shields.io/visual-studio-marketplace/v/robole.marky-markdown?logo=visual-studio-code&color=ffa500" alt="Visual Studio Marketplace Version">
-<img src="https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=12KB&color=008000"
+<img src="https://img.shields.io/static/v1?logo=visual-studio-code&label=size&message=15KB&color=008000"
 alt="Extension file size in bytes">
 <img src="https://img.shields.io/visual-studio-marketplace/r/robole.marky-markdown?logo=visual-studio-code&color=yellow" alt="Visual Studio Marketplace Rating">
 <img src="https://img.shields.io/visual-studio-marketplace/d/robole.marky-markdown?logo=visual-studio-code&color=blue" alt="downloads"/>
@@ -21,9 +21,9 @@ alt="Extension file size in bytes">
 <a href="https://ko-fi.com/roboleary"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee" alt="Buy me a coffee"></a>
 </p>
 
-This is an extension pack for a collection of related markdown extensions I wrote. 
+This is an extension pack of related markdown extensions (that I wrote), which gives rich editing powers for markdown documents.
 
-The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features you don't use, or don't want by disabling an extension. You can go a step further and choose to only install the extensions you use.
+The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features by disabling a particular extension. You can go a step further and choose to only install the extensions you want, once you become familiar with them. This gives you maximum control with no downside.
 
 ## Extensions
 
