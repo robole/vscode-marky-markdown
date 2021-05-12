@@ -21,9 +21,9 @@ alt="Extension file size in bytes">
 <a href="https://ko-fi.com/roboleary"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee" alt="Buy me a coffee"></a>
 </p>
 
-This is an extension pack of related markdown extensions (that I wrote), which gives rich editing powers for markdown documents.
+This is an extension pack of related markdown extensions (that I wrote), which add rich editing powers to markdown documents.
 
-The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features by disabling a particular extension. You can go a step further and choose to only install the extensions you want, once you become familiar with them. This gives you maximum control with no downside.
+The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features by disabling a particular extension. You can go a step further and choose to only install the extensions you want. This gives you a similar feature set but with a lot more control.
 
 ## Extensions
 
@@ -70,39 +70,31 @@ See individual extensions for up-to-date list.
 
 ### 1) Toggle-style editing
 
+Toggle-style editing offers a more natural editing experience. It enables you to mark or unmark text as you type, and insert markdown fragments as snippets for simple completion.
+
 ![toggle editing](img/screenshots/toggleStrong.gif)
 
 For more information, see [Marky Edit](https://marketplace.visualstudio.com/items?itemName=robole.marky-edit).
 
-### 2) Manage a Table of Contents (TOC)
+### 2) Dynamic content
 
-The command `Marky Dynamic: Add/Update the Table of Contents (TOC)` will add a table of contents (TOC) **at the cursor position in the active markdown document**. If the TOC exists already, it will be updated.
+Editing and reformating documents can leave content such as table of contents out of sync with the rest of the document. This extension enables you to update the table of contents when you save the document.
 
 ![Add TOC](img/screenshots/add-toc.gif)
 
-The command `Marky Dynamic: Remove the Table of Contents (TOC)` will remove the TOC.
-
 For more information, see [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic).
 
-### 3) Manage Section Numbering
-
-The command `Marky Dynamic: Add/Update Section Numbering` will add section numbers to the headings in the active markdown document.
-
-The command `Marky Dynamic: Remove Section Numbering` will remove the section numbers.
-
-For more information, see [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic).
-
-### 4) Markdown Snippets
+### 3) Markdown Snippets
 
 ![table snippet](img/screenshots/table.gif)
 
-I recommend installing the [Snippets Ranger](https://marketplace.visualstudio.com/items?itemName=robole.snippets-ranger) extension to give you an easy to view and edit of all of the snippets available.
+Provides snippets for extended markdown syntax.
 
 For more information, see [Markdown Snippets](https://marketplace.visualstudio.com/items?itemName=robole.markdown-snippets).
 
-### 5) Document Stats
+### 4) Document Stats
 
-A stat for the document is added to the status bar. By default, it is the *Reading Time*.
+A stat about the document is added to the status bar. By default, it is the *Reading Time*.
 
 ![select stat](img/screenshots/stat-select.gif)
 
