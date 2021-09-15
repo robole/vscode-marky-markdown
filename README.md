@@ -21,16 +21,16 @@ alt="Extension file size in bytes">
 <a href="https://ko-fi.com/roboleary"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$4-orange?logo=buy-me-a-coffee" alt="Buy me a coffee"></a>
 </p>
 
-This is an extension pack of related markdown extensions (that I wrote), which add rich editing powers to markdown documents.
+This is an extension pack of related markdown extensions that I wrote, which add rich editing powers to markdown documents.
 
-The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that you can disable features by disabling a particular extension. You can go a step further and choose to only install the extensions you want. This gives you a similar feature set but with a lot more control.
+The advantage that this extension pack has over an extension such as [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) is that it is much smaller and is modular. You can disable features by disabling a particular extension. You can go a step further and only install the extensions you want. This gives you a similar feature set, but with a lot more control.
 
 ## Extensions
 
 1. [Marky Edit](https://marketplace.visualstudio.com/items?itemName=robole.marky-edit): Toggle-style editing.
 1. [Marky Dynamic](https://marketplace.visualstudio.com/items?itemName=robole.marky-dynamic): Automate updating dynamic content such as Table of Contents.
 1. [Markdown Snippets](https://marketplace.visualstudio.com/items?itemName=robole.markdown-snippets): Snippets for extended markdown syntax.
-1. [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown): Add stats to the status bar.
+1. [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-stats): Add stats to the status bar.
 
 ## Activation
 
@@ -94,13 +94,13 @@ For more information, see [Markdown Snippets](https://marketplace.visualstudio.c
 
 ### 4) Document Stats
 
-A stat about the document is added to the status bar. By default, it is the *Reading Time*.
+Stats are displayed on the status bar. By default, it is the *Reading Time*.
 
 ![select stat](img/screenshots/stat-select.gif)
 
-You can choose an alternative stat by clicking the status bar item, and selecting from the quickpick menu.
+You can choose which stats to show by clicking the status bar item, and selecting from the quickpick menu.
 
-For more information, see [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-markdown).
+For more information, see [Marky Stats](https://marketplace.visualstudio.com/items?itemName=robole.marky-stats).
 
 ## Extension Settings
 
@@ -112,8 +112,12 @@ You will find options for these extensions by searching for "marky".
 1. Inside VS Code: Type `Ctrl+P`, write `ext install robole.marky-markdown` in the text field, and hit `Enter`.
 1. From the Command-line: Run the command `code --install-extension robole.marky-markdown`.
 
-## Show gratitude
+## Show appreciation
 
-If you are happy with the extension, please star the repo, and leave a review to help others find it. 🌟
+If you are happy with the extension: please star the repo 🌟, and [leave a review in the visual studio marketplace](https://marketplace.visualstudio.com/items?itemName=robole.marky-stats&ssr=false#review-details) to help others find it. 🌟🌟🌟🌟🌟
 
-You can [buy me a coffee](https://ko-fi.com/roboleary) if you would like to support me in my quest to make more great open-source software. ☕🙏
+You can show your appreciation by [buying me a coffee or sponsoring me](https://ko-fi.com/roboleary). This will offer me encouragement to continue, and will provide a path to dedicating more time to open-source in the future.
+
+<p align="center">
+<a href="https://ko-fi.com/roboleary"><img src="img/coffee.png" alt="buy me a coffee"></a>
+</p>
